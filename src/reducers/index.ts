@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
 
 export const rootReducer = combineReducers({
-  someReducer: () => {
-    return { prop: 'hello' };
+  authenticatedUser: (state = {}, action) => {
+    return state;
+  },
+  lessons: (state = [], action) => {
+    return state;
+  },
+  operation: (state = {}, action) => {
+    return state;
   },
 });

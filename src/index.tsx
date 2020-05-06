@@ -1,12 +1,20 @@
+// Libs
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { configureStore } from './store';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 
+// Components
+import { Provider } from 'react-redux';
+import App from './App';
+
+// Utils
+import { configureStore } from './store';
+
+// Styles
+import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Workers
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <Provider store={configureStore()}>

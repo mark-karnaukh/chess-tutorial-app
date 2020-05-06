@@ -1,0 +1,26 @@
+.auth-form {
+  flex-basis: 30%;
+
+  .form-group {
+    padding: 0 5%;
+
+    &:first-child {
+      padding-top: 5%;
+    }
+  }
+
+  .user-type-inputs {
+    .form-group {
+      padding-top: unset;
+
+      .form-label {
+        padding-left: unset;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .submit-section {
+    margin-top: 7.5%;
+  }
+}
