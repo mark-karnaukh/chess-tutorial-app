@@ -8,6 +8,15 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Nav from 'react-bootstrap/Nav';
 
+// Constants
+import {
+  PROP_FIRST_NAME,
+  PROP_LAST_NAME,
+  PROP_EMAIL,
+  PROP_PASSWORD,
+  PROP_USER_TYPE,
+} from '../constants';
+
 // Styles
 import '../styles/auth-form.scss';
 
@@ -16,7 +25,27 @@ interface Props {
   onSwitchForm(): void;
 }
 
-export default class SignUpForm extends PureComponent<Props> {
+interface State {
+  [PROP_FIRST_NAME]: string;
+  [PROP_LAST_NAME]: string;
+  [PROP_PASSWORD]: string;
+  [PROP_EMAIL]: string;
+  [PROP_USER_TYPE]: string;
+}
+
+export default class SignUpForm extends PureComponent<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      [PROP_FIRST_NAME]: '',
+      [PROP_LAST_NAME]: '',
+      [PROP_PASSWORD]: '',
+      [PROP_EMAIL]: '',
+      [PROP_USER_TYPE]: '',
+    };
+  }
+
   render() {
     const { onSwitchForm } = this.props;
 

@@ -8,10 +8,31 @@ import logger from 'redux-logger';
 import { rootReducer } from './reducers';
 
 // Utils
+import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+// Root saga
+import { rootSaga } from './sagas';
+
+// Constants
+import {
+  PROP_USER,
+  PROP_LESSONS,
+  PROP_OPERATION,
+  PROP_OPERATION_DATA,
+  PROP_OPERATION_TYPE,
+  PROP_ERRORS,
+  PROP_DATA,
+  PROP_SELECTED_ITEM_ID,
+} from './constants';
+
+// Types
+import { GlobalState } from './types';
+
 const isProductionMode = process.env.NODE_ENV === 'production';
-let middleware = [] as Middleware[];
+const sagaMiddleware = createSagaMiddleware();
+
+let middleware = [sagaMiddleware] as Middleware[];
 
 if (!isProductionMode) {
   middleware = [...middleware, logger];
@@ -19,18 +40,32 @@ if (!isProductionMode) {
 
 const appliedMiddleware = applyMiddleware(...middleware);
 
-export const initialState = {
-  authenticatedUser: {},
-  lessons: [],
-  operation: {},
+export const initialState: GlobalState = {
+  [PROP_USER]: {
+    [PROP_ERRORS]: [],
+    [PROP_DATA]: {},
+  },
+  [PROP_LESSONS]: {
+    [PROP_SELECTED_ITEM_ID]: null,
+    [PROP_DATA]: {},
+    [PROP_ERRORS]: [],
+  },
+  [PROP_OPERATION]: {
+    [PROP_OPERATION_TYPE]: null,
+    [PROP_OPERATION_DATA]: {},
+  },
 };
 
 export const configureStore = () => {
-  return createStore(
+  const store = createStore(
     rootReducer,
     initialState,
     isProductionMode
       ? appliedMiddleware
       : composeWithDevTools(appliedMiddleware)
   );
+
+  sagaMiddleware.run(rootSaga);
+
+  return store;
 };

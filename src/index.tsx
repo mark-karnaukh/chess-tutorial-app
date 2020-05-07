@@ -10,7 +10,6 @@ import App from './App';
 import { configureStore } from './store';
 
 // Styles
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Workers
