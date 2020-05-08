@@ -1,6 +1,7 @@
 // Firebase
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 // Constants
 import {
@@ -14,7 +15,7 @@ import {
 } from './constants';
 
 // Initializing a firebase app
-const firebaseApp = firebase.initializeApp({
+export const firebaseApp = firebase.initializeApp({
   [PROP_API_KEY]: process.env.REACT_APP_FIREBASE_KEY,
   [PROP_AUTH_DOMAIN]: process.env.REACT_APP_FIREBASE_DOMAIN,
   [PROP_DATABASE_URL]: process.env.REACT_APP_FIREBASE_DATABASE,
@@ -25,10 +26,6 @@ const firebaseApp = firebase.initializeApp({
 });
 
 // Getting reference links to firebase auth and firestore services
-const auth = firebaseApp.auth();
-const db = firebaseApp.firestore();
-
-export default {
-  auth,
-  db,
-};
+// and exporting them
+export const auth = firebaseApp.auth();
+export const db = firebaseApp.firestore();

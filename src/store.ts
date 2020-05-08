@@ -16,9 +16,9 @@ import { rootSaga } from './sagas';
 
 // Constants
 import {
-  PROP_USER,
-  PROP_LESSONS,
-  PROP_OPERATION,
+  STATE_USER,
+  STATE_LESSONS,
+  STATE_OPERATION,
   PROP_OPERATION_DATA,
   PROP_OPERATION_TYPE,
   PROP_ERRORS,
@@ -41,16 +41,16 @@ if (!isProductionMode) {
 const appliedMiddleware = applyMiddleware(...middleware);
 
 export const initialState: GlobalState = {
-  [PROP_USER]: {
+  [STATE_USER]: {
     [PROP_ERRORS]: [],
     [PROP_DATA]: {},
   },
-  [PROP_LESSONS]: {
+  [STATE_LESSONS]: {
     [PROP_SELECTED_ITEM_ID]: null,
     [PROP_DATA]: {},
     [PROP_ERRORS]: [],
   },
-  [PROP_OPERATION]: {
+  [STATE_OPERATION]: {
     [PROP_OPERATION_TYPE]: null,
     [PROP_OPERATION_DATA]: {},
   },

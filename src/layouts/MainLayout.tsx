@@ -1,5 +1,7 @@
 // Libs
-import React, { Component } from 'react';
+import React from 'react';
+
+// Utils
 import { connect } from 'react-redux';
 
 // Components
@@ -9,6 +11,7 @@ import Container from 'react-bootstrap/Container';
 import '../styles/layout.scss';
 
 // Types
+import { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 export class MainLayout extends Component<RouteComponentProps> {

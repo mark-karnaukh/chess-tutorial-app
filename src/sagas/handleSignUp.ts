@@ -1,0 +1,52 @@
+// Redux saga effects
+import { takeLatest, put } from 'redux-saga/effects';
+
+// Types
+import { SignUpAction, UserDataActionPayload } from '../types';
+
+// Constants
+import {
+  ACTION_SIGN_UP,
+  PROP_ACTION_PAYLOAD,
+  PROP_USER_ID,
+  PROP_PASSWORD,
+} from '../constants';
+
+// Firebase
+import { auth as firebaseAuth } from '../firebase';
+
+// Actions
+import { onLogIn, onSubmitUserData } from '../actions';
+
+// Watcher saga
+export function* onWatchSignUp() {
+  yield takeLatest(ACTION_SIGN_UP, onHandleSignUp);
+}
+
+// Worker saga
+function* onHandleSignUp(action: SignUpAction) {
+  const {
+    payload: { email, password },
+  } = action;
+
+  try {
+    yield firebaseAuth.createUserWithEmailAndPassword(email, password);
+
+    yield put(onLogIn({ email, password: password }));
+
+    const userId = firebaseAuth.currentUser?.uid;
+
+    yield put(
+      onSubmitUserData({
+        ...Object.fromEntries(
+          Object.entries(action[PROP_ACTION_PAYLOAD]).filter(
+            (entry) => entry[0] !== PROP_PASSWORD
+          )
+        ),
+        [PROP_USER_ID]: userId,
+      } as UserDataActionPayload)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}

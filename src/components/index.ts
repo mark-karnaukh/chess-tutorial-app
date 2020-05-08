@@ -1,2 +1,2 @@
-export { default as LoginForm } from './LoginForm';
+export { default as LogInForm } from './LogInForm';
 export { default as SignUpForm } from './SignUpForm';
