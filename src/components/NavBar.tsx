@@ -17,6 +17,7 @@ import {
   ROUTE_PATH_DEFAULT,
   ROUTE_PATH_LESSONS,
   ROUTE_PATH_PROFILE,
+  PROP_CURRENT_LOCATION_PATH,
 } from '../constants';
 
 // Static assets
@@ -25,16 +26,27 @@ import Logo from '../assets/chess-logo.png';
 // Local types
 interface Props {
   onSignOut(): SignOutAction;
+  [PROP_CURRENT_LOCATION_PATH]: string;
 }
 
 export default class NavBar extends PureComponent<Props> {
   private renderNavLinks = (): JSX.Element => {
+    const { [PROP_CURRENT_LOCATION_PATH]: currentLocationPath } = this.props;
+
     return (
       <Nav className="mr-auto">
-        <Nav.Link as={Link} to={ROUTE_PATH_LESSONS}>
+        <Nav.Link
+          as={Link}
+          to={ROUTE_PATH_LESSONS}
+          disabled={currentLocationPath === ROUTE_PATH_LESSONS}
+        >
           Lessons
         </Nav.Link>
-        <Nav.Link as={Link} to={ROUTE_PATH_PROFILE}>
+        <Nav.Link
+          as={Link}
+          to={ROUTE_PATH_PROFILE}
+          disabled={currentLocationPath === ROUTE_PATH_PROFILE}
+        >
           User Profile
         </Nav.Link>
       </Nav>

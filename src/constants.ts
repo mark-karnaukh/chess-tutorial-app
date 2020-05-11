@@ -76,5 +76,6 @@ export const ROUTE_PATH_PROFILE = '/profile';
 // Component Related Props
 export const PROP_IS_AUTHENTICATED_USER = 'isAuthenticatedUser';
 export const PROP_IS_REGISTERED_USER = 'isRegisteredUser';
+export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';
 
 /*****************************************************************************************/
