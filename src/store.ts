@@ -24,6 +24,8 @@ import {
   PROP_ERRORS,
   PROP_DATA,
   PROP_SELECTED_ITEM_ID,
+  ERRORS_SIGN_IN,
+  ERRORS_SIGN_UP,
 } from './constants';
 
 // Types
@@ -42,7 +44,10 @@ const appliedMiddleware = applyMiddleware(...middleware);
 
 export const initialState: GlobalState = {
   [STATE_USER]: {
-    [PROP_ERRORS]: [],
+    [PROP_ERRORS]: {
+      [ERRORS_SIGN_IN]: [],
+      [ERRORS_SIGN_UP]: [],
+    },
     [PROP_DATA]: {},
   },
   [STATE_LESSONS]: {

@@ -15,15 +15,15 @@ import '../styles/auth-form.scss';
 
 // Imported types
 import { PureComponent, FormEvent } from 'react';
-import { LogInAction, LogInActionPayload as State } from '../types';
+import { SignInAction, SignInActionPayload as State } from '../types';
 
 // Local types
 interface Props {
   onSwitchForm(): void;
-  onLogIn(logInData: State): LogInAction;
+  onSignIn(signInData: State): SignInAction;
 }
 
-export default class LogInForm extends PureComponent<Props, State> {
+export default class SignInForm extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -35,12 +35,12 @@ export default class LogInForm extends PureComponent<Props, State> {
     [PROP_PASSWORD]: '',
   });
 
-  private onHandleLogIn = (e: FormEvent) => {
-    const { onLogIn } = this.props;
+  private onHandleSignIn = (e: FormEvent) => {
+    const { onSignIn } = this.props;
 
     e.preventDefault();
 
-    onLogIn(this.state);
+    onSignIn(this.state);
     this.setState(this.getInitialState());
   };
 
@@ -50,8 +50,8 @@ export default class LogInForm extends PureComponent<Props, State> {
 
     return (
       <Form
-        className="auth-form log-in-form shadow p-3 mb-5 bg-white rounded"
-        onSubmit={this.onHandleLogIn}
+        className="auth-form sign-in-form shadow p-3 mb-5 bg-white rounded"
+        onSubmit={this.onHandleSignIn}
       >
         <Form.Group controlId="userEmail">
           <Form.Label>Email address</Form.Label>
@@ -82,7 +82,7 @@ export default class LogInForm extends PureComponent<Props, State> {
         </Form.Group>
         <Row className={'submit-section justify-content-around'}>
           <Button variant="primary" type="submit">
-            Log In
+            Sign In
           </Button>
           <Nav onSelect={() => onSwitchForm()}>
             <Nav.Item>

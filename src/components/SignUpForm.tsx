@@ -159,7 +159,7 @@ export default class SignUpForm extends PureComponent<Props, State> {
           </Button>
           <Nav onSelect={() => onSwitchForm()}>
             <Nav.Item>
-              <Nav.Link eventKey="sign-ip">Log In</Nav.Link>
+              <Nav.Link eventKey="sign-in">Sign In</Nav.Link>
             </Nav.Item>
           </Nav>
         </Row>

@@ -1,5 +1,5 @@
 // Redux saga effects
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, delay } from 'redux-saga/effects';
 
 // Types
 import { FetchUserDataAction, UserDataActionPayload } from '../types';
@@ -24,7 +24,13 @@ export function* onFetchUserData(action: FetchUserDataAction) {
     payload: { userId },
   } = action;
 
-  const userData = yield fireStore.collection(DB_USERS).doc(userId).get();
+  yield delay(1000);
 
-  yield put(onPutUserData(userData.data() as UserDataActionPayload));
+  try {
+    const userData = yield fireStore.collection(DB_USERS).doc(userId).get();
+
+    yield put(onPutUserData(userData.data() as UserDataActionPayload));
+  } catch (error) {
+    console.log(error);
+  }
 }

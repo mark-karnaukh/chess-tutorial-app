@@ -16,7 +16,7 @@ import {
 import { auth as firebaseAuth } from '../firebase';
 
 // Actions
-import { onLogIn, onSubmitUserData } from '../actions';
+import { onSignIn, onSubmitUserData } from '../actions';
 
 // Watcher saga
 export function* onWatchSignUp() {
@@ -32,7 +32,7 @@ function* onHandleSignUp(action: SignUpAction) {
   try {
     yield firebaseAuth.createUserWithEmailAndPassword(email, password);
 
-    yield put(onLogIn({ email, password: password }));
+    yield put(onSignIn({ email, password: password }));
 
     const userId = firebaseAuth.currentUser?.uid;
 

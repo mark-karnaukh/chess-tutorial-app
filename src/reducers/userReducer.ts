@@ -7,10 +7,15 @@ import {
   ACTION_CLEAR_USER_DATA,
   PROP_DATA,
   PROP_ERRORS,
+  ERRORS_SIGN_IN,
+  ERRORS_SIGN_UP,
 } from '../constants';
 
 export function userReducer(
-  state: UserState = { [PROP_DATA]: {}, [PROP_ERRORS]: [] } as UserState,
+  state: UserState = {
+    [PROP_DATA]: {},
+    [PROP_ERRORS]: { [ERRORS_SIGN_IN]: [], [ERRORS_SIGN_UP]: [] },
+  } as UserState,
   action: UserStateActions
 ): UserState {
   const { type, payload = {} } = action;

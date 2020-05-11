@@ -7,40 +7,53 @@ import { bindActionCreators } from 'redux';
 
 // Components
 import Container from 'react-bootstrap/Container';
-import { LogInForm, SignUpForm } from '../components';
+import { SignInForm, SignUpForm } from '../components';
+import { Redirect } from 'react-router-dom';
+
+// Constants
+import {
+  PROP_IS_AUTHENTICATED_USER,
+  PROP_IS_REGISTERED_USER,
+  ROUTE_PATH_DEFAULT,
+} from '../constants';
 
 // Styles
 import '../styles/auth-layout.scss';
 import '../styles/layout.scss';
 
 // Actions
-import { onLogIn, onSignUp } from '../actions';
+import { onSignIn, onSignUp } from '../actions';
+
+// Selectors
+import { isAuthenticatedUser$ } from '../selectors';
 
 // Imported types
 import { Component } from 'react';
 import {
-  LogInAction,
-  LogInActionPayload,
+  SignInAction,
+  SignInActionPayload,
   SignUpAction,
   SignUpActionPayload,
+  GlobalState,
 } from '../types';
 import { RouteComponentProps } from 'react-router';
 import { Dispatch, AnyAction } from 'redux';
 
 // Local types
 export interface Props extends RouteComponentProps {
-  onLogIn(logInData: LogInActionPayload): LogInAction;
+  onSignIn(signInData: SignInActionPayload): SignInAction;
   onSignUp(signUpData: SignUpActionPayload): SignUpAction;
+  [PROP_IS_AUTHENTICATED_USER]: boolean;
 }
 
 export interface State {
-  isRegistered: boolean;
+  [PROP_IS_REGISTERED_USER]: boolean;
 }
 
 export class AuthLayout extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { isRegistered: true };
+    this.state = { [PROP_IS_REGISTERED_USER]: true };
   }
 
   render() {
@@ -52,28 +65,42 @@ export class AuthLayout extends Component<Props, State> {
   }
 
   private onSwitchForm = (): void => {
-    const { isRegistered } = this.state;
+    const { [PROP_IS_REGISTERED_USER]: isRegisteredUser } = this.state;
 
     this.setState(() => {
-      return { isRegistered: !isRegistered };
+      return { isRegisteredUser: !isRegisteredUser };
     });
   };
 
   private renderForm = (): JSX.Element => {
-    const { isRegistered } = this.state;
-    const { onLogIn, onSignUp } = this.props;
+    const { isRegisteredUser } = this.state;
+    const {
+      onSignIn,
+      onSignUp,
+      location: { state },
+      [PROP_IS_AUTHENTICATED_USER]: isAuthenticatedUser,
+    } = this.props;
+    const { from: pathToRedirect } = (state as { [key: string]: string }) || {
+      from: { pathname: ROUTE_PATH_DEFAULT },
+    };
 
-    return isRegistered ? (
-      <LogInForm onSwitchForm={this.onSwitchForm} onLogIn={onLogIn} />
+    if (isAuthenticatedUser) {
+      return <Redirect to={pathToRedirect} push={true} />;
+    }
+
+    return isRegisteredUser ? (
+      <SignInForm onSwitchForm={this.onSwitchForm} onSignIn={onSignIn} />
     ) : (
       <SignUpForm onSwitchForm={this.onSwitchForm} onSignUp={onSignUp} />
     );
   };
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state: GlobalState) => ({
+  [PROP_IS_AUTHENTICATED_USER]: isAuthenticatedUser$(state),
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
-  bindActionCreators({ onLogIn, onSignUp }, dispatch);
+  bindActionCreators({ onSignIn, onSignUp }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthLayout);

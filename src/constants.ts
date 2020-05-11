@@ -20,8 +20,9 @@ export const DB_LESSONS = 'lessons';
 /*****************************************************************************************/
 
 // Action Types
-export const ACTION_LOG_IN = 'LOG_IN';
+export const ACTION_SIGN_IN = 'SIGN_IN';
 export const ACTION_SIGN_UP = 'SIGN_UP';
+export const ACTION_SIGN_OUT = 'SIGN_OUT';
 export const ACTION_SUBMIT_USER_DATA = 'SUBMIT_USER_DATA';
 export const ACTION_FETCH_USER_DATA = 'FETCH_USER_DATA';
 export const ACTION_PUT_USER_DATA = 'PUT_USER_DATA';
@@ -59,8 +60,21 @@ export const PROP_USER_TYPE = 'userType';
 export const TYPE_TEACHER = 'teacher';
 export const TYPE_STUDENT = 'student';
 
-// Errors
-export const ERROR_LOG_IN = 'errorLogIn';
-export const ERROR_SIGN_UP = 'errorSignUp';
+// Network Request Errors
+export const ERRORS_SIGN_IN = 'errorsSignIn';
+export const ERRORS_SIGN_UP = 'errorsSignUp';
+
+export const PROP_ERROR_CODE = 'code';
+export const PROP_ERROR_MESSAGE = 'message';
+
+// Routes
+export const ROUTE_PATH_DEFAULT = '/';
+export const ROUTE_PATH_AUTH = '/auth';
+export const ROUTE_PATH_LESSONS = '/lessons';
+export const ROUTE_PATH_PROFILE = '/profile';
+
+// Component Related Props
+export const PROP_IS_AUTHENTICATED_USER = 'isAuthenticatedUser';
+export const PROP_IS_REGISTERED_USER = 'isRegisteredUser';
 
 /*****************************************************************************************/

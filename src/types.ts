@@ -12,6 +12,10 @@ import {
   PROP_OPERATION_DATA,
   PROP_OPERATION_TYPE,
   PROP_ERRORS,
+  ERRORS_SIGN_IN,
+  ERRORS_SIGN_UP,
+  PROP_ERROR_CODE,
+  PROP_ERROR_MESSAGE,
   PROP_DATA,
   PROP_SELECTED_ITEM_ID,
   PROP_ACTION_TYPE,
@@ -20,7 +24,10 @@ import {
 
 // Global state
 export interface UserState {
-  [PROP_ERRORS]: Array<any>;
+  [PROP_ERRORS]: {
+    [ERRORS_SIGN_IN]: Array<AuthError>;
+    [ERRORS_SIGN_UP]: Array<AuthError>;
+  };
   [PROP_DATA]: UserDataActionPayload | {};
 }
 
@@ -42,7 +49,7 @@ export interface GlobalState {
 }
 
 // Actions
-export interface LogInActionPayload {
+export interface SignInActionPayload {
   [PROP_EMAIL]: string;
   [PROP_PASSWORD]: string;
 }
@@ -67,14 +74,19 @@ export interface UserDataActionPayload {
   [PROP_USER_ID]: string;
 }
 
-export interface LogInAction {
-  [PROP_ACTION_TYPE]: 'LOG_IN';
-  [PROP_ACTION_PAYLOAD]: LogInActionPayload;
+export interface SignInAction {
+  [PROP_ACTION_TYPE]: 'SIGN_IN';
+  [PROP_ACTION_PAYLOAD]: SignInActionPayload;
 }
 
 export interface SignUpAction {
   [PROP_ACTION_TYPE]: 'SIGN_UP';
   [PROP_ACTION_PAYLOAD]: SignUpActionPayload;
+}
+
+export interface SignOutAction {
+  [PROP_ACTION_TYPE]: 'SIGN_OUT';
+  [PROP_ACTION_PAYLOAD]: undefined;
 }
 
 export interface FetchUserDataAction {
@@ -98,3 +110,9 @@ export interface ClearUserDataAction {
 }
 
 export type UserStateActions = PutUserDataAction | ClearUserDataAction;
+
+// Network request errors
+export interface AuthError extends Error {
+  [PROP_ERROR_CODE]: string;
+  [PROP_ERROR_MESSAGE]: string;
+}

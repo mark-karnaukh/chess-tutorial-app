@@ -2,15 +2,17 @@
 import { all, fork } from 'redux-saga/effects';
 
 // Sagas
-import { onWatchLogIn } from './handleLogIn';
+import { onWatchSignIn } from './handleSignIn';
 import { onWatchSignUp } from './handleSignUp';
+import { onWatchSignOut } from './handleSignOut';
 import { onWatchSubmitUserData } from './submitUserData';
 import { onWatchFetchUserData } from './fetchUserData';
 
 export const rootSaga = function* rootSaga() {
   yield all([
-    fork(onWatchLogIn),
+    fork(onWatchSignIn),
     fork(onWatchSignUp),
+    fork(onWatchSignOut),
     fork(onWatchSubmitUserData),
     fork(onWatchFetchUserData),
   ]);
