@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { NavBar } from '../components';
+import { NavHeader } from '../components';
 
 // Styles
 import '../styles/layout.scss';
@@ -39,15 +39,14 @@ export class MainLayout extends Component<Props> {
       <Container className={'d-flex flex-column layout main-layout'} fluid>
         <Row>
           <Col>
-            <NavBar onSignOut={onSignOut} currentLocationPath={pathname} />
+            <NavHeader onSignOut={onSignOut} currentLocationPath={pathname} />
           </Col>
         </Row>
         <Row className={'flex-grow-1'}>
-          <Col lg={2} md={3}>
+          <Col lg={4} md={5}>
             Main Layout
           </Col>
-          <Col className={'shadow-sm'} lg={7} md={5}></Col>
-          <Col lg={3} md={4}></Col>
+          <Col className={'shadow'} lg={8} md={7}></Col>
         </Row>
       </Container>
     );

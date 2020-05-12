@@ -29,7 +29,7 @@ interface Props {
   [PROP_CURRENT_LOCATION_PATH]: string;
 }
 
-export default class NavBar extends PureComponent<Props> {
+export default class NavHeader extends PureComponent<Props> {
   private renderNavLinks = (): JSX.Element => {
     const { [PROP_CURRENT_LOCATION_PATH]: currentLocationPath } = this.props;
 
@@ -66,8 +66,8 @@ export default class NavBar extends PureComponent<Props> {
           <img
             alt="chess logo"
             src={Logo}
-            width="100"
-            height="100"
+            width="75"
+            height="75"
             className="d-inline-block align-center"
           />{' '}
           Chess Tutorial App

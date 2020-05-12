@@ -20,6 +20,7 @@ import {
   PROP_SELECTED_ITEM_ID,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
+  PROP_IS_LOADING,
 } from './constants';
 
 // Global state
@@ -29,12 +30,14 @@ export interface UserState {
     [ERRORS_SIGN_UP]: Array<AuthError>;
   };
   [PROP_DATA]: UserDataActionPayload | {};
+  [PROP_IS_LOADING]: boolean;
 }
 
 export interface LessonsState {
   [PROP_SELECTED_ITEM_ID]: number | null;
   [PROP_DATA]: Object;
   [PROP_ERRORS]: Array<any>;
+  [PROP_IS_LOADING]: boolean;
 }
 
 export interface OperationState {
@@ -74,6 +77,11 @@ export interface UserDataActionPayload {
   [PROP_USER_ID]: string;
 }
 
+export type PutAuthRequestErrorActionPayload = Record<
+  AuthErrorGroup,
+  AuthError
+>;
+
 export interface SignInAction {
   [PROP_ACTION_TYPE]: 'SIGN_IN';
   [PROP_ACTION_PAYLOAD]: SignInActionPayload;
@@ -109,10 +117,32 @@ export interface ClearUserDataAction {
   [PROP_ACTION_PAYLOAD]: undefined;
 }
 
-export type UserStateActions = PutUserDataAction | ClearUserDataAction;
+export interface ToggleUserDataLoadingAction {
+  [PROP_ACTION_TYPE]: 'TOGGLE_USER_DATA_LOADING';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export interface PutAuthRequestErrorAction {
+  [PROP_ACTION_TYPE]: 'PUT_AUTH_REQUEST_ERROR';
+  [PROP_ACTION_PAYLOAD]: PutAuthRequestErrorActionPayload;
+}
+
+export interface ClearAuthRequestErrorsAction {
+  [PROP_ACTION_TYPE]: 'CLEAR_AUTH_REQUEST_ERRORS';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export type UserStateActions =
+  | PutUserDataAction
+  | PutAuthRequestErrorAction
+  | ClearUserDataAction
+  | ToggleUserDataLoadingAction
+  | ClearAuthRequestErrorsAction;
 
 // Network request errors
 export interface AuthError extends Error {
   [PROP_ERROR_CODE]: string;
   [PROP_ERROR_MESSAGE]: string;
 }
+
+export type AuthErrorGroup = 'errorsSignIn' | 'errorsSignUp';

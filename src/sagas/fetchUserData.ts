@@ -5,10 +5,15 @@ import { takeLatest, put, delay } from 'redux-saga/effects';
 import { FetchUserDataAction, UserDataActionPayload } from '../types';
 
 // Constants
-import { ACTION_FETCH_USER_DATA, DB_USERS } from '../constants';
+import { ACTION_FETCH_USER_DATA, DB_USERS, ERRORS_SIGN_IN } from '../constants';
 
 // Actions
-import { onPutUserData } from '../actions';
+import {
+  onPutUserData,
+  onToggleUserDataLoading,
+  onPutAuthRequestError,
+  onClearAuthRequestErrors,
+} from '../actions';
 
 // Firebase
 import { db as fireStore } from '../firebase';
@@ -24,13 +29,19 @@ export function* onFetchUserData(action: FetchUserDataAction) {
     payload: { userId },
   } = action;
 
+  yield put(onToggleUserDataLoading());
   yield delay(1000);
 
   try {
     const userData = yield fireStore.collection(DB_USERS).doc(userId).get();
 
     yield put(onPutUserData(userData.data() as UserDataActionPayload));
+    yield put(onClearAuthRequestErrors());
   } catch (error) {
     console.log(error);
+
+    yield put(onPutAuthRequestError(ERRORS_SIGN_IN, error));
+  } finally {
+    yield put(onToggleUserDataLoading());
   }
 }

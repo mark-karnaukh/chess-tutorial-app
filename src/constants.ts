@@ -27,6 +27,9 @@ export const ACTION_SUBMIT_USER_DATA = 'SUBMIT_USER_DATA';
 export const ACTION_FETCH_USER_DATA = 'FETCH_USER_DATA';
 export const ACTION_PUT_USER_DATA = 'PUT_USER_DATA';
 export const ACTION_CLEAR_USER_DATA = 'CLEAR_USER_DATA';
+export const ACTION_TOGGLE_USER_DATA_LOADING = 'TOGGLE_USER_DATA_LOADING';
+export const ACTION_PUT_AUTH_REQUEST_ERROR = 'PUT_AUTH_REQUEST_ERROR';
+export const ACTION_CLEAR_AUTH_REQUEST_ERRORS = 'CLEAR_AUTH_REQUEST_ERRORS';
 
 // Action Props
 export const PROP_ACTION_TYPE = 'type';
@@ -74,8 +77,11 @@ export const ROUTE_PATH_LESSONS = '/lessons';
 export const ROUTE_PATH_PROFILE = '/profile';
 
 // Component Related Props
-export const PROP_IS_AUTHENTICATED_USER = 'isAuthenticatedUser';
-export const PROP_IS_REGISTERED_USER = 'isRegisteredUser';
+export const PROP_IS_AUTHENTICATED = 'isAuthenticated';
+export const PROP_IS_REGISTERED = 'isRegistered';
+export const PROP_IS_VALIDATED = 'isValidated';
+export const PROP_IS_LOADING = 'isLoading';
 export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';
+export const PROP_COMPONENT = 'component';
 
 /*****************************************************************************************/

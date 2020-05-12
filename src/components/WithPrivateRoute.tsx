@@ -5,15 +5,19 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 // Constants
-import { ROUTE_PATH_AUTH } from '../constants';
+import {
+  ROUTE_PATH_AUTH,
+  PROP_IS_AUTHENTICATED,
+  PROP_COMPONENT,
+} from '../constants';
 
 // Imported types
 import { RouteProps } from 'react-router-dom';
 
 // Local types
 export interface Props extends RouteProps {
-  isAuthenticated: boolean;
-  component: any;
+  [PROP_IS_AUTHENTICATED]: boolean;
+  [PROP_COMPONENT]: any;
 }
 
 export default ({ isAuthenticated, component: Component, ...rest }: Props) => (

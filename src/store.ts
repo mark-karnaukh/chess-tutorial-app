@@ -26,6 +26,7 @@ import {
   PROP_SELECTED_ITEM_ID,
   ERRORS_SIGN_IN,
   ERRORS_SIGN_UP,
+  PROP_IS_LOADING,
 } from './constants';
 
 // Types
@@ -49,11 +50,13 @@ export const initialState: GlobalState = {
       [ERRORS_SIGN_UP]: [],
     },
     [PROP_DATA]: {},
+    [PROP_IS_LOADING]: false,
   },
   [STATE_LESSONS]: {
     [PROP_SELECTED_ITEM_ID]: null,
     [PROP_DATA]: {},
     [PROP_ERRORS]: [],
+    [PROP_IS_LOADING]: false,
   },
   [STATE_OPERATION]: {
     [PROP_OPERATION_TYPE]: null,

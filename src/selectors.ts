@@ -14,6 +14,7 @@ import {
   ERRORS_SIGN_UP,
   PROP_DATA,
   PROP_USER_ID,
+  PROP_IS_LOADING,
 } from './constants';
 
 // General global state selectors
@@ -23,9 +24,19 @@ export const selectOperationState$ = (state: GlobalState) =>
   state[STATE_OPERATION];
 
 // User state selectors
-export const selectUserAuthErrors$ = createSelector(
+export const selectAuthRequestErrors$ = createSelector(
   selectUserState$,
   (userState) => userState[PROP_ERRORS]
+);
+
+export const selectSignInAuthErrors$ = createSelector(
+  selectAuthRequestErrors$,
+  (authRequestErrors) => authRequestErrors[ERRORS_SIGN_IN]
+);
+
+export const selectSignUpAuthErrors$ = createSelector(
+  selectAuthRequestErrors$,
+  (authRequestErrors) => authRequestErrors[ERRORS_SIGN_UP]
 );
 
 export const selectUserData$ = createSelector(
@@ -33,19 +44,26 @@ export const selectUserData$ = createSelector(
   (userState) => userState[PROP_DATA]
 );
 
-export const isAuthenticatedUser$ = createSelector(
+export const isAuthenticated$ = createSelector(
   selectUserData$,
-  selectUserAuthErrors$,
-  (userData, userAuthErrors) => {
-    const {
-      [ERRORS_SIGN_IN]: signInErrors,
-      [ERRORS_SIGN_UP]: signUpErrors,
-    } = userAuthErrors;
-
+  selectSignInAuthErrors$,
+  selectSignUpAuthErrors$,
+  (userData, signInAuthErrors, signUpAuthErrors) => {
     return (
-      !signInErrors.length &&
-      !signUpErrors.length &&
+      !signInAuthErrors.length &&
+      !signUpAuthErrors.length &&
       !!(userData as UserDataActionPayload)[PROP_USER_ID]
     );
+  }
+);
+
+export const isLoading$ = createSelector(
+  selectUserState$,
+  selectLessonsState$,
+  (userState, lessonsState) => {
+    const { [PROP_IS_LOADING]: isUserDataLoading } = userState;
+    const { [PROP_IS_LOADING]: isLessonsDataLoading } = lessonsState;
+
+    return isUserDataLoading || isLessonsDataLoading;
   }
 );

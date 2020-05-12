@@ -23,7 +23,7 @@ import {
   ROUTE_PATH_AUTH,
   ROUTE_PATH_DEFAULT,
   ROUTE_PATH_LESSONS,
-  PROP_IS_AUTHENTICATED_USER,
+  PROP_IS_AUTHENTICATED,
   PROP_USER_ID,
 } from './constants';
 
@@ -31,7 +31,7 @@ import {
 import { onFetchUserData } from './actions';
 
 // Selectors
-import { isAuthenticatedUser$ } from './selectors';
+import { isAuthenticated$ } from './selectors';
 
 // Imported Types
 import { Component } from 'react';
@@ -45,7 +45,7 @@ import {
 // Local Types
 export interface Props {
   onFetchUserData(userData: FetchUserDataActionPayload): FetchUserDataAction;
-  [PROP_IS_AUTHENTICATED_USER]: boolean;
+  [PROP_IS_AUTHENTICATED]: boolean;
 }
 
 class App extends Component<Props> {
@@ -81,7 +81,7 @@ class App extends Component<Props> {
   };
 
   render() {
-    const { [PROP_IS_AUTHENTICATED_USER]: isAuthenticated } = this.props;
+    const { [PROP_IS_AUTHENTICATED]: isAuthenticated } = this.props;
 
     return (
       <Router>
@@ -104,7 +104,7 @@ class App extends Component<Props> {
 }
 
 const mapStateToProps = (state: GlobalState) => ({
-  [PROP_IS_AUTHENTICATED_USER]: isAuthenticatedUser$(state),
+  [PROP_IS_AUTHENTICATED]: isAuthenticated$(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>

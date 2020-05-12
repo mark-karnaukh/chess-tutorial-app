@@ -10,13 +10,19 @@ import {
   PROP_ACTION_PAYLOAD,
   PROP_USER_ID,
   PROP_PASSWORD,
+  ERRORS_SIGN_UP,
 } from '../constants';
 
 // Firebase
 import { auth as firebaseAuth } from '../firebase';
 
 // Actions
-import { onSignIn, onSubmitUserData } from '../actions';
+import {
+  onSignIn,
+  onSubmitUserData,
+  onToggleUserDataLoading,
+  onPutAuthRequestError,
+} from '../actions';
 
 // Watcher saga
 export function* onWatchSignUp() {
@@ -28,6 +34,8 @@ function* onHandleSignUp(action: SignUpAction) {
   const {
     payload: { email, password },
   } = action;
+
+  yield put(onToggleUserDataLoading());
 
   try {
     yield firebaseAuth.createUserWithEmailAndPassword(email, password);
@@ -48,5 +56,9 @@ function* onHandleSignUp(action: SignUpAction) {
     );
   } catch (error) {
     console.log(error);
+
+    yield put(onPutAuthRequestError(ERRORS_SIGN_UP, error));
+  } finally {
+    yield put(onToggleUserDataLoading());
   }
 }
