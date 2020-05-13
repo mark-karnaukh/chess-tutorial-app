@@ -29,8 +29,6 @@ export function* onHandleSignIn(action: SignInAction) {
   try {
     yield firebaseAuth.signInWithEmailAndPassword(email, password);
   } catch (error) {
-    console.log(error);
-
     yield put(onPutAuthRequestError(ERRORS_SIGN_IN, error));
   } finally {
     yield put(onToggleUserDataLoading());

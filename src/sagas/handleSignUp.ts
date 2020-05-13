@@ -55,8 +55,6 @@ function* onHandleSignUp(action: SignUpAction) {
       } as UserDataActionPayload)
     );
   } catch (error) {
-    console.log(error);
-
     yield put(onPutAuthRequestError(ERRORS_SIGN_UP, error));
   } finally {
     yield put(onToggleUserDataLoading());

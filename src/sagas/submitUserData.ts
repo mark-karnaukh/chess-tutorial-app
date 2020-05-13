@@ -33,8 +33,6 @@ export function* onSubmitUserData(action: SubmitUserDataAction) {
   try {
     yield fireStore.collection(DB_USERS).doc(userId).set(action.payload);
   } catch (error) {
-    console.log(error);
-
     yield put(onPutAuthRequestError(ERRORS_SIGN_UP, error));
   } finally {
     yield put(onToggleUserDataLoading());

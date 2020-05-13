@@ -8,10 +8,13 @@ import Spinner from 'react-bootstrap/Spinner';
 // Constants
 import { PROP_IS_LOADING } from '../constants';
 
+// Imported types
+import { ComponentProps } from 'react';
+
 // Local types
 export interface Props {
   [PROP_IS_LOADING]: boolean;
-  [key: string]: any;
+  [key: string]: ComponentProps<any>;
 }
 
 export default (Component: any) => ({ isLoading, ...restProps }: Props) => (

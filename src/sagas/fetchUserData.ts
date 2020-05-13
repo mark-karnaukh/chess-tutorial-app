@@ -38,8 +38,6 @@ export function* onFetchUserData(action: FetchUserDataAction) {
     yield put(onPutUserData(userData.data() as UserDataActionPayload));
     yield put(onClearAuthRequestErrors());
   } catch (error) {
-    console.log(error);
-
     yield put(onPutAuthRequestError(ERRORS_SIGN_IN, error));
   } finally {
     yield put(onToggleUserDataLoading());
