@@ -2,7 +2,7 @@
 import { takeLatest, put } from 'redux-saga/effects';
 
 // Types
-import { SignUpAction, UserDataActionPayload } from '../types';
+import { SignUpAction, UserDataActionPayload as UserData } from '../types';
 
 // Constants
 import {
@@ -52,7 +52,7 @@ function* onHandleSignUp(action: SignUpAction) {
           )
         ),
         [PROP_USER_ID]: userId,
-      } as UserDataActionPayload)
+      } as UserData)
     );
   } catch (error) {
     yield put(onPutAuthRequestError(ERRORS_SIGN_UP, error));

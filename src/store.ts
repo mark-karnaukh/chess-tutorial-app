@@ -27,6 +27,7 @@ import {
   ERRORS_SIGN_IN,
   ERRORS_SIGN_UP,
   PROP_IS_LOADING,
+  STATE_NOTIFICATION,
 } from './constants';
 
 // Types
@@ -62,6 +63,7 @@ export const initialState: GlobalState = {
     [PROP_OPERATION_TYPE]: null,
     [PROP_OPERATION_DATA]: {},
   },
+  [STATE_NOTIFICATION]: null,
 };
 
 export const configureStore = () => {

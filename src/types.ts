@@ -21,6 +21,12 @@ import {
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
   PROP_IS_LOADING,
+  PROP_NOTIFICATION_HEADER,
+  PROP_NOTIFICATION_BODY,
+  PROP_FORMATTED_DATE_TIME,
+  PROP_DELAY_TIME,
+  PROP_WITH_AUTO_HIDE,
+  STATE_NOTIFICATION,
 } from './constants';
 
 // Global state
@@ -45,10 +51,13 @@ export interface OperationState {
   [PROP_OPERATION_DATA]: Object;
 }
 
+export type NotificationState = PutNotificationActionPayload | null;
+
 export interface GlobalState {
   [STATE_USER]: UserState;
   [STATE_LESSONS]: LessonsState;
   [STATE_OPERATION]: OperationState;
+  [STATE_NOTIFICATION]: NotificationState;
 }
 
 // Actions
@@ -81,6 +90,14 @@ export type PutAuthRequestErrorActionPayload = Record<
   AuthErrorGroup,
   AuthError
 >;
+
+export interface PutNotificationActionPayload {
+  [PROP_NOTIFICATION_HEADER]: string;
+  [PROP_NOTIFICATION_BODY]: string;
+  [PROP_FORMATTED_DATE_TIME]: string;
+  [PROP_WITH_AUTO_HIDE]?: boolean;
+  [PROP_DELAY_TIME]?: number;
+}
 
 export interface SignInAction {
   [PROP_ACTION_TYPE]: 'SIGN_IN';
@@ -138,6 +155,20 @@ export type UserStateActions =
   | ClearUserDataAction
   | ToggleUserDataLoadingAction
   | ClearAuthRequestErrorsAction;
+
+export type NotificationStateActions =
+  | PutNotificationAction
+  | ClearNotificationAction;
+
+export interface PutNotificationAction {
+  [PROP_ACTION_TYPE]: 'PUT_NOTIFICATION';
+  [PROP_ACTION_PAYLOAD]: PutNotificationActionPayload;
+}
+
+export interface ClearNotificationAction {
+  [PROP_ACTION_TYPE]: 'CLEAR_NOTIFICATION';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
 
 // Network request errors
 export interface AuthError extends Error {

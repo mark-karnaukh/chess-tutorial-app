@@ -18,6 +18,7 @@
     "chessboardjsx": "^2.4.2",
     "chessjs": "0.0.1",
     "firebase": "^7.14.3",
+    "moment": "^2.25.3",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",

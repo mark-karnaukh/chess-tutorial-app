@@ -7,6 +7,7 @@ import { onWatchSignUp } from './handleSignUp';
 import { onWatchSignOut } from './handleSignOut';
 import { onWatchSubmitUserData } from './submitUserData';
 import { onWatchFetchUserData } from './fetchUserData';
+import { onWatchPutNotification } from './showNotification';
 
 export const rootSaga = function* rootSaga() {
   yield all([
@@ -15,5 +16,6 @@ export const rootSaga = function* rootSaga() {
     fork(onWatchSignOut),
     fork(onWatchSubmitUserData),
     fork(onWatchFetchUserData),
+    fork(onWatchPutNotification),
   ]);
 };

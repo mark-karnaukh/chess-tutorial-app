@@ -30,6 +30,8 @@ export const ACTION_CLEAR_USER_DATA = 'CLEAR_USER_DATA';
 export const ACTION_TOGGLE_USER_DATA_LOADING = 'TOGGLE_USER_DATA_LOADING';
 export const ACTION_PUT_AUTH_REQUEST_ERROR = 'PUT_AUTH_REQUEST_ERROR';
 export const ACTION_CLEAR_AUTH_REQUEST_ERRORS = 'CLEAR_AUTH_REQUEST_ERRORS';
+export const ACTION_PUT_NOTIFICATION = 'PUT_NOTIFICATION';
+export const ACTION_CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION';
 
 // Action Props
 export const PROP_ACTION_TYPE = 'type';
@@ -44,6 +46,7 @@ export const PROP_SELECTED_ITEM_ID = 'selectedItemId';
 export const STATE_OPERATION = 'operation';
 export const PROP_OPERATION_TYPE = 'operationType';
 export const PROP_OPERATION_DATA = 'operationData';
+export const STATE_NOTIFICATION = 'notification';
 
 /*****************************************************************************************/
 
@@ -76,10 +79,21 @@ export const ROUTE_PATH_AUTH = '/auth';
 export const ROUTE_PATH_LESSONS = '/lessons';
 export const ROUTE_PATH_PROFILE = '/profile';
 
+// Notification
+export const PROP_NOTIFICATION_HEADER = 'notificationHeader';
+export const PROP_NOTIFICATION_BODY = 'notificationBody';
+export const PROP_WITH_AUTO_HIDE = 'withAutoHide';
+export const PROP_FORMATTED_DATE_TIME = 'formattedDateTime';
+export const PROP_DELAY_TIME = 'delayTime';
+
 // Component Related Props
+// ----- Auth -----
 export const PROP_IS_AUTHENTICATED = 'isAuthenticated';
+// ----- Forms -----
 export const PROP_IS_REGISTERED = 'isRegistered';
 export const PROP_IS_VALIDATED = 'isValidated';
+// ----- Other -----
+export const PROP_IS_OPEN = 'isOpen';
 export const PROP_IS_LOADING = 'isLoading';
 export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';
 export const PROP_COMPONENT = 'component';

@@ -9,6 +9,7 @@ import {
   STATE_USER,
   STATE_LESSONS,
   STATE_OPERATION,
+  STATE_NOTIFICATION,
   PROP_ERRORS,
   ERRORS_SIGN_IN,
   ERRORS_SIGN_UP,
@@ -22,6 +23,8 @@ export const selectUserState$ = (state: GlobalState) => state[STATE_USER];
 export const selectLessonsState$ = (state: GlobalState) => state[STATE_LESSONS];
 export const selectOperationState$ = (state: GlobalState) =>
   state[STATE_OPERATION];
+export const selectNotification$ = (state: GlobalState) =>
+  state[STATE_NOTIFICATION];
 
 // User state selectors
 export const selectAuthRequestErrors$ = createSelector(

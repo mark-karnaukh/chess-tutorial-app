@@ -103,7 +103,7 @@ export class AuthLayout extends Component<Props, State> {
     });
   };
 
-  private renderForm = (): JSX.Element => {
+  private renderForm = (): JSX.Element | null => {
     const { isRegistered } = this.state;
     const {
       onSignIn,
@@ -121,7 +121,7 @@ export class AuthLayout extends Component<Props, State> {
       return <Redirect to={pathToRedirect} push={true} />;
     }
 
-    return isRegistered ? (
+    const formToRender = isRegistered ? (
       <SignInForm
         onSwitchForm={this.onSwitchForm}
         onSignIn={onSignIn}
@@ -134,6 +134,8 @@ export class AuthLayout extends Component<Props, State> {
         errors={signUpAuthErrors}
       />
     );
+
+    return !isAuthenticated ? formToRender : null;
   };
 }
 

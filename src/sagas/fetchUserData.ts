@@ -1,11 +1,28 @@
 // Redux saga effects
-import { takeLatest, put, delay } from 'redux-saga/effects';
+import { takeLatest, put, delay, select } from 'redux-saga/effects';
+
+// Libs
+import moment from 'moment';
 
 // Types
-import { FetchUserDataAction, UserDataActionPayload } from '../types';
+import {
+  FetchUserDataAction,
+  UserDataActionPayload as UserData,
+} from '../types';
 
 // Constants
-import { ACTION_FETCH_USER_DATA, DB_USERS, ERRORS_SIGN_IN } from '../constants';
+import {
+  ACTION_FETCH_USER_DATA,
+  DB_USERS,
+  ERRORS_SIGN_IN,
+  PROP_NOTIFICATION_HEADER,
+  PROP_NOTIFICATION_BODY,
+  PROP_FORMATTED_DATE_TIME,
+  PROP_WITH_AUTO_HIDE,
+} from '../constants';
+
+// Selectors
+import { selectUserData$ } from '../selectors';
 
 // Actions
 import {
@@ -13,6 +30,7 @@ import {
   onToggleUserDataLoading,
   onPutAuthRequestError,
   onClearAuthRequestErrors,
+  onPutNotification,
 } from '../actions';
 
 // Firebase
@@ -33,13 +51,28 @@ export function* onFetchUserData(action: FetchUserDataAction) {
   yield delay(1000);
 
   try {
-    const userData = yield fireStore.collection(DB_USERS).doc(userId).get();
+    const userDataDoc = yield fireStore.collection(DB_USERS).doc(userId).get();
 
-    yield put(onPutUserData(userData.data() as UserDataActionPayload));
+    yield put(onPutUserData(userDataDoc.data() as UserData));
     yield put(onClearAuthRequestErrors());
   } catch (error) {
     yield put(onPutAuthRequestError(ERRORS_SIGN_IN, error));
   } finally {
     yield put(onToggleUserDataLoading());
+  }
+
+  const userData = yield select(selectUserData$);
+
+  if (!!Object.entries(userData).length) {
+    const { firstName, lastName } = userData as UserData;
+
+    yield put(
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: 'Signed In Successfully',
+        [PROP_NOTIFICATION_BODY]: `Welcome ${firstName} ${lastName}`,
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_WITH_AUTO_HIDE]: true,
+      })
+    );
   }
 }

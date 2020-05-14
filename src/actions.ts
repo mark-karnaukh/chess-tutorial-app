@@ -10,6 +10,8 @@ import {
   ACTION_TOGGLE_USER_DATA_LOADING,
   ACTION_PUT_AUTH_REQUEST_ERROR,
   ACTION_CLEAR_AUTH_REQUEST_ERRORS,
+  ACTION_PUT_NOTIFICATION,
+  ACTION_CLEAR_NOTIFICATION,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
 } from './constants';
@@ -33,6 +35,8 @@ import {
   ClearAuthRequestErrorsAction,
   AuthError,
   AuthErrorGroup,
+  PutNotificationAction,
+  PutNotificationActionPayload,
 } from './types';
 
 export const onSignIn = (signInData: SignInActionPayload): SignInAction => {
@@ -112,6 +116,22 @@ export const onPutAuthRequestError = (
 export const onClearAuthRequestErrors = (): ClearAuthRequestErrorsAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_CLEAR_AUTH_REQUEST_ERRORS,
+    [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onPutNotification = (
+  notificationData: PutNotificationActionPayload
+): PutNotificationAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_PUT_NOTIFICATION,
+    [PROP_ACTION_PAYLOAD]: notificationData,
+  };
+};
+
+export const onClearNotification = () => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_CLEAR_NOTIFICATION,
     [PROP_ACTION_PAYLOAD]: undefined,
   };
 };

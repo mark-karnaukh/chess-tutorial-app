@@ -16,7 +16,7 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import { WithPrivateRoute } from './components';
+import { WithPrivateRoute, Notification } from './components';
 
 // Constants
 import {
@@ -25,13 +25,14 @@ import {
   ROUTE_PATH_LESSONS,
   PROP_IS_AUTHENTICATED,
   PROP_USER_ID,
+  STATE_NOTIFICATION,
 } from './constants';
 
 // Actions
 import { onFetchUserData } from './actions';
 
 // Selectors
-import { isAuthenticated$ } from './selectors';
+import { isAuthenticated$, selectNotification$ } from './selectors';
 
 // Imported Types
 import { Component } from 'react';
@@ -40,12 +41,14 @@ import {
   FetchUserDataAction,
   FetchUserDataActionPayload,
   GlobalState,
+  NotificationState,
 } from './types';
 
 // Local Types
 export interface Props {
   onFetchUserData(userData: FetchUserDataActionPayload): FetchUserDataAction;
   [PROP_IS_AUTHENTICATED]: boolean;
+  [STATE_NOTIFICATION]: NotificationState;
 }
 
 class App extends Component<Props> {
@@ -80,6 +83,16 @@ class App extends Component<Props> {
     );
   };
 
+  private showNotification = (): JSX.Element | null => {
+    const { notification } = this.props;
+
+    if (!!notification) {
+      return <Notification {...notification} />;
+    }
+
+    return null;
+  };
+
   render() {
     const { [PROP_IS_AUTHENTICATED]: isAuthenticated } = this.props;
 
@@ -98,6 +111,7 @@ class App extends Component<Props> {
             <Route path={ROUTE_PATH_AUTH} component={AuthLayout} />
           </Switch>
         </div>
+        {this.showNotification()}
       </Router>
     );
   }
@@ -105,6 +119,7 @@ class App extends Component<Props> {
 
 const mapStateToProps = (state: GlobalState) => ({
   [PROP_IS_AUTHENTICATED]: isAuthenticated$(state),
+  [STATE_NOTIFICATION]: selectNotification$(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
