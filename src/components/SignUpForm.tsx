@@ -118,7 +118,7 @@ export default class SignUpForm extends PureComponent<Props, State> {
         className="auth-form sign-up-form shadow p-3 mb-5 bg-white rounded"
         onSubmit={this.onHandleSignUp}
       >
-        <Form.Group controlId="userFirstName">
+        <Form.Group controlId="signUp.userFirstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control
             required
@@ -137,7 +137,7 @@ export default class SignUpForm extends PureComponent<Props, State> {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group controlId="userLastName">
+        <Form.Group controlId="signUp.userLastName">
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             required
@@ -156,7 +156,7 @@ export default class SignUpForm extends PureComponent<Props, State> {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group controlId="userEmail">
+        <Form.Group controlId="signUp.userEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             required
@@ -175,7 +175,7 @@ export default class SignUpForm extends PureComponent<Props, State> {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group controlId="userPassword">
+        <Form.Group controlId="signUp.userPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             required

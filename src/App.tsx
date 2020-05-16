@@ -8,8 +8,15 @@ import { bindActionCreators } from 'redux';
 // Firebase
 import { auth as firebaseAuth } from './firebase';
 
+// Layouts
+import {
+  AuthLayout,
+  MainLayout,
+  UnderConstructionLayout,
+  NotFoundLayout,
+} from './layouts';
+
 // Components
-import { AuthLayout, MainLayout } from './layouts';
 import {
   BrowserRouter as Router,
   Route,
@@ -23,6 +30,7 @@ import {
   ROUTE_PATH_AUTH,
   ROUTE_PATH_DEFAULT,
   ROUTE_PATH_LESSONS,
+  ROUTE_PATH_PROFILE,
   PROP_IS_AUTHENTICATED,
   PROP_USER_ID,
   STATE_NOTIFICATION,
@@ -94,7 +102,7 @@ class App extends Component<Props> {
   };
 
   render() {
-    const { [PROP_IS_AUTHENTICATED]: isAuthenticated } = this.props;
+    const { isAuthenticated } = this.props;
 
     return (
       <Router>
@@ -108,7 +116,17 @@ class App extends Component<Props> {
               path={ROUTE_PATH_LESSONS}
               component={MainLayout}
             />
+            <WithPrivateRoute
+              isAuthenticated={isAuthenticated}
+              path={ROUTE_PATH_PROFILE}
+              component={UnderConstructionLayout}
+            />
             <Route path={ROUTE_PATH_AUTH} component={AuthLayout} />
+            <WithPrivateRoute
+              isAuthenticated={isAuthenticated}
+              path={'*'}
+              component={NotFoundLayout}
+            />
           </Switch>
         </div>
         {this.showNotification()}

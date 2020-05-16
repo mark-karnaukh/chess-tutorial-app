@@ -22,6 +22,7 @@ import {
   onSubmitUserData,
   onToggleUserDataLoading,
   onPutAuthRequestError,
+  onClearAuthRequestErrors,
 } from '../actions';
 
 // Watcher saga
@@ -36,6 +37,7 @@ function* onHandleSignUp(action: SignUpAction) {
   } = action;
 
   yield put(onToggleUserDataLoading());
+  yield put(onClearAuthRequestErrors());
 
   try {
     yield firebaseAuth.createUserWithEmailAndPassword(email, password);

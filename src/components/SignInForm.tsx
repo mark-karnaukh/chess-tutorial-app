@@ -96,7 +96,7 @@ export default class SignInForm extends PureComponent<Props, State> {
         className="auth-form sign-in-form shadow p-3 mb-5 bg-white rounded"
         onSubmit={this.onHandleSignIn}
       >
-        <Form.Group controlId="userEmail">
+        <Form.Group controlId="signIn.userEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             required
@@ -115,7 +115,7 @@ export default class SignInForm extends PureComponent<Props, State> {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group controlId="userPassword">
+        <Form.Group controlId="signIn.userPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             required

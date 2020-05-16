@@ -29,7 +29,6 @@ import {
   onPutUserData,
   onToggleUserDataLoading,
   onPutAuthRequestError,
-  onClearAuthRequestErrors,
   onPutNotification,
 } from '../actions';
 
@@ -54,7 +53,6 @@ export function* onFetchUserData(action: FetchUserDataAction) {
     const userDataDoc = yield fireStore.collection(DB_USERS).doc(userId).get();
 
     yield put(onPutUserData(userDataDoc.data() as UserData));
-    yield put(onClearAuthRequestErrors());
   } catch (error) {
     yield put(onPutAuthRequestError(ERRORS_SIGN_IN, error));
   } finally {

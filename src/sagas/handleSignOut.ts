@@ -1,3 +1,6 @@
+// Libs
+import moment from 'moment';
+
 // Redux saga effects
 import { takeLatest, put } from 'redux-saga/effects';
 
@@ -5,10 +8,18 @@ import { takeLatest, put } from 'redux-saga/effects';
 import { SignOutAction } from '../types';
 
 // Constants
-import { ACTION_SIGN_OUT } from '../constants';
+import {
+  ACTION_SIGN_OUT,
+  PROP_NOTIFICATION_HEADER,
+  PROP_NOTIFICATION_BODY,
+  PROP_FORMATTED_DATE_TIME,
+  PROP_DELAY_TIME,
+  PROP_ERROR_MESSAGE,
+  PROP_ERROR_CODE,
+} from '../constants';
 
 // Actions
-import { onClearUserData } from '../actions';
+import { onClearUserData, onPutNotification } from '../actions';
 
 // Firebase
 import { auth as firebaseAuth } from '../firebase';
@@ -29,6 +40,14 @@ export function* onHandleSignOut(action: SignOutAction) {
       yield put(onClearUserData());
     }
   } catch (error) {
+    yield put(
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: `Sign Out Error ${error[PROP_ERROR_CODE]}!`,
+        [PROP_NOTIFICATION_BODY]: error[PROP_ERROR_MESSAGE],
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_DELAY_TIME]: 4000,
+      })
+    );
     console.log(error);
   }
 }

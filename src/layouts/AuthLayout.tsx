@@ -93,7 +93,7 @@ export class AuthLayout extends Component<Props, State> {
   };
 
   private onSwitchForm = (): void => {
-    const { [PROP_IS_REGISTERED]: isRegistered } = this.state;
+    const { isRegistered } = this.state;
     const { onClearAuthRequestErrors } = this.props;
 
     this.setState(() => {
@@ -111,7 +111,7 @@ export class AuthLayout extends Component<Props, State> {
       location: { state },
       [ERRORS_SIGN_IN]: signInAuthErrors,
       [ERRORS_SIGN_UP]: signUpAuthErrors,
-      [PROP_IS_AUTHENTICATED]: isAuthenticated,
+      isAuthenticated,
     } = this.props;
     const { from: pathToRedirect } = (state as { [key: string]: string }) || {
       from: { pathname: ROUTE_PATH_DEFAULT },

@@ -31,7 +31,7 @@ interface Props {
 
 export default class NavHeader extends PureComponent<Props> {
   private renderNavLinks = (): JSX.Element => {
-    const { [PROP_CURRENT_LOCATION_PATH]: currentLocationPath } = this.props;
+    const { currentLocationPath } = this.props;
 
     return (
       <Nav className="mr-auto">

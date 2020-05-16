@@ -54,7 +54,7 @@ export const STATE_NOTIFICATION = 'notification';
 /***************************************** Other *****************************************/
 /*****************************************************************************************/
 
-// Data Props
+// User Data Props
 export const PROP_USER_ID = 'userId';
 export const PROP_FIRST_NAME = 'firstName';
 export const PROP_LAST_NAME = 'lastName';
@@ -62,9 +62,25 @@ export const PROP_EMAIL = 'email';
 export const PROP_PASSWORD = 'password';
 export const PROP_USER_TYPE = 'userType';
 
+// Lesson Data Props
+export const PROP_TITLE = 'title';
+export const PROP_DESCRIPTION = 'description';
+export const PROP_INITIAL_BOARD_POSITION = 'initialBoardPosition';
+export const PROP_CHECK_MOVES = 'checkMoves';
+export const PROP_CREATED_BY = 'createdBy';
+export const PROP_CREATED_AT = 'createdAt';
+
 // User Types
 export const TYPE_TEACHER = 'teacher';
 export const TYPE_STUDENT = 'student';
+
+// Chess Moves
+export const PROP_SOURCE_SQUARE = 'sourceSquare';
+export const PROP_TARGET_SQUARE = 'targetSquare';
+export const PROP_PIECE = 'piece';
+export const PROP_FEN_STRING = 'fenStr';
+export const PROP_FROM = 'from';
+export const PROP_TO = 'to';
 
 // Network Request Errors
 export const ERRORS_SIGN_IN = 'errorsSignIn';
@@ -87,15 +103,16 @@ export const PROP_FORMATTED_DATE_TIME = 'formattedDateTime';
 export const PROP_DELAY_TIME = 'delayTime';
 
 // Component Related Props
-// ----- Auth -----
 export const PROP_IS_AUTHENTICATED = 'isAuthenticated';
-// ----- Forms -----
 export const PROP_IS_REGISTERED = 'isRegistered';
 export const PROP_IS_VALIDATED = 'isValidated';
-// ----- Other -----
+export const PROP_IS_ADD_EDIT_MODE = 'isAddEditMode';
 export const PROP_IS_OPEN = 'isOpen';
 export const PROP_IS_LOADING = 'isLoading';
 export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';
 export const PROP_COMPONENT = 'component';
+export const PROP_NEW_CHECK_MOVE = 'newCheckMove';
+export const PROP_ACTUAL_BOARD_POSITION = 'actualBoardPosition';
+export const PROP_LESSON_DATA = 'lessonData';
 
 /*****************************************************************************************/

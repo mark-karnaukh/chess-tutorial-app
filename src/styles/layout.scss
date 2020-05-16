@@ -1,3 +1,37 @@
 .layout {
   height: 100vh;
+
+  &.main-layout {
+    input,
+    textarea {
+      background-color: #f8f9fa;
+
+      &.form-control:disabled,
+      &.form-control[readonly] {
+        background-color: #e9ecef;
+      }
+    }
+  }
+
+  &.main-layout,
+  &.profile-layout {
+    .nav-header,
+    .nav-footer {
+      flex-basis: 13.5%;
+
+      .navbar {
+        height: 100%;
+      }
+    }
+
+    .lessons-view {
+      background-color: #e9ecef;
+    }
+
+    .lessons-view,
+    .profile-view {
+      flex-basis: 73%;
+      overflow: hidden;
+    }
+  }
 }

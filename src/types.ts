@@ -27,7 +27,15 @@ import {
   PROP_DELAY_TIME,
   PROP_WITH_AUTO_HIDE,
   STATE_NOTIFICATION,
+  PROP_SOURCE_SQUARE,
+  PROP_TARGET_SQUARE,
+  PROP_PIECE,
+  PROP_FEN_STRING,
 } from './constants';
+
+// Imported types
+import { Square } from 'chess.js';
+import { Piece } from 'chessboardjsx';
 
 // Global state
 export interface UserState {
@@ -174,6 +182,17 @@ export interface ClearNotificationAction {
 export interface AuthError extends Error {
   [PROP_ERROR_CODE]: string;
   [PROP_ERROR_MESSAGE]: string;
+}
+
+// Chess Moves
+export interface Move {
+  [PROP_SOURCE_SQUARE]: Square;
+  [PROP_TARGET_SQUARE]: Square;
+  [PROP_PIECE]: Piece;
+}
+
+export interface CheckMove extends Move {
+  [PROP_FEN_STRING]: string;
 }
 
 export type AuthErrorGroup = 'errorsSignIn' | 'errorsSignUp';

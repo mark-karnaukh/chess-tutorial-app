@@ -8,7 +8,11 @@ import { SignInAction } from '../types';
 import { ACTION_SIGN_IN, ERRORS_SIGN_IN } from '../constants';
 
 // Actions
-import { onToggleUserDataLoading, onPutAuthRequestError } from '../actions';
+import {
+  onToggleUserDataLoading,
+  onPutAuthRequestError,
+  onClearAuthRequestErrors,
+} from '../actions';
 
 // Firebase
 import { auth as firebaseAuth } from '../firebase';
@@ -25,6 +29,7 @@ export function* onHandleSignIn(action: SignInAction) {
   } = action;
 
   yield put(onToggleUserDataLoading());
+  yield put(onClearAuthRequestErrors());
 
   try {
     yield firebaseAuth.signInWithEmailAndPassword(email, password);

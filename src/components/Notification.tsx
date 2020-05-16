@@ -44,6 +44,7 @@ export default class Notification extends PureComponent<Props, State> {
             top: '45%',
             left: '45%',
             width: '35%',
+            zIndex: 5,
           }}
         >
           <Toast.Header>
