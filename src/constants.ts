@@ -42,7 +42,7 @@ export const STATE_USER = 'user';
 export const STATE_LESSONS = 'lessons';
 export const PROP_DATA = 'data';
 export const PROP_ERRORS = 'errors';
-export const PROP_SELECTED_ITEM_ID = 'selectedItemId';
+export const PROP_SELECTED_LESSON_ID = 'selectedLessonId';
 export const STATE_OPERATION = 'operation';
 export const PROP_OPERATION_TYPE = 'operationType';
 export const PROP_OPERATION_DATA = 'operationData';
@@ -63,6 +63,7 @@ export const PROP_PASSWORD = 'password';
 export const PROP_USER_TYPE = 'userType';
 
 // Lesson Data Props
+export const PROP_ID = 'id';
 export const PROP_TITLE = 'title';
 export const PROP_DESCRIPTION = 'description';
 export const PROP_INITIAL_BOARD_POSITION = 'initialBoardPosition';

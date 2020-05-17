@@ -41,10 +41,10 @@ import {
   PutNotificationActionPayload as NotificationData,
   Move,
   CheckMove,
+  LessonData,
 } from '../types';
 import { PureComponent, ClipboardEvent, ChangeEvent } from 'react';
 import { ChessInstance } from 'chess.js';
-import { Moment } from 'moment';
 
 // Local types
 export interface Props {
@@ -55,14 +55,7 @@ export interface State {
   [PROP_IS_ADD_EDIT_MODE]: boolean;
   [PROP_NEW_CHECK_MOVE]: CheckMove | null;
   [PROP_ACTUAL_BOARD_POSITION]: string;
-  [PROP_LESSON_DATA]: {
-    [PROP_TITLE]: string;
-    [PROP_DESCRIPTION]: string;
-    [PROP_INITIAL_BOARD_POSITION]: string;
-    [PROP_CHECK_MOVES]: Array<CheckMove>;
-    [PROP_CREATED_BY]: number;
-    [PROP_CREATED_AT]: Moment | null;
-  };
+  [PROP_LESSON_DATA]: LessonData;
 }
 
 export default class LessonInfo extends PureComponent<Props, State> {
@@ -107,8 +100,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
     return (
       <Form.Group controlId="lesson.title" className={'w-100'}>
         <Form.Label className={'pl-3'}>Title:</Form.Label>
-        <Col lg={12} md={12} sm={12} className={'d-inline-block'}>
+        <Col className={'d-inline-block'}>
           <Form.Control
+            className={'text-truncate'}
             size="sm"
             type="text"
             placeholder="Enter the lesson title"
@@ -197,8 +191,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
     return (
       <Row className={'mt-3'}>
         <Form.Group controlId="lesson.description" className={'w-100'}>
-          <Form.Label className={'pl-3'}>Description:</Form.Label>
-          <Col className={'d-inline-block'} lg={12} md={12} sm={12}>
+          <Form.Label className={'pl-3 text-truncate'}>Description:</Form.Label>
+          <Col className={'d-inline-block'}>
             <Form.Control
               as="textarea"
               rows={3}
@@ -284,6 +278,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 onClick={this.onAddNewCheckMove}
               >
                 Add
+                <span className={'ml-2'} role={'img'} aria-label="add-icon">
+                  ➕
+                </span>
               </Button>
               <Button
                 variant="secondary"
@@ -293,6 +290,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 }}
               >
                 Cancel
+                <span className={'ml-2'} role={'img'} aria-label="cancel-icon">
+                  ❌
+                </span>
               </Button>
             </Col>
           </Row>
@@ -483,7 +483,6 @@ export default class LessonInfo extends PureComponent<Props, State> {
     const { newCheckMove } = this.state;
 
     this.setState(() => {
-      debugger;
       let previousBoardPosition = '';
 
       if (
@@ -531,7 +530,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
       onPutNotification({
         [PROP_NOTIFICATION_HEADER]: 'Add New Check Move Failed!',
         [PROP_NOTIFICATION_BODY]:
-          'Please fill in all required fields before committing a new check move.',
+          'Please fill in all required fields before adding a new check move.',
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
         [PROP_DELAY_TIME]: 4000,
         [PROP_WITH_AUTO_HIDE]: true,

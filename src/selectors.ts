@@ -2,7 +2,7 @@
 import { createSelector } from 'reselect';
 
 // Types
-import { GlobalState, UserDataActionPayload } from './types';
+import { GlobalState, UserData } from './types';
 
 // Constants
 import {
@@ -55,7 +55,7 @@ export const isAuthenticated$ = createSelector(
     return (
       !signInAuthErrors.length &&
       !signUpAuthErrors.length &&
-      !!(userData as UserDataActionPayload)[PROP_USER_ID]
+      !!(userData as UserData)[PROP_USER_ID]
     );
   }
 );

@@ -2,7 +2,7 @@
 import { takeLatest, put } from 'redux-saga/effects';
 
 // Types
-import { SignUpAction, UserDataActionPayload as UserData } from '../types';
+import { SignUpAction, UserData } from '../types';
 
 // Constants
 import {

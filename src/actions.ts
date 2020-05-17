@@ -27,7 +27,7 @@ import {
   FetchUserDataActionPayload,
   SubmitUserDataAction,
   PutUserDataAction,
-  UserDataActionPayload,
+  UserData,
   ClearUserDataAction,
   ToggleUserDataLoadingAction,
   PutAuthRequestErrorAction,
@@ -69,18 +69,14 @@ export const onFetchUserData = (
   };
 };
 
-export const onSubmitUserData = (
-  userData: UserDataActionPayload
-): SubmitUserDataAction => {
+export const onSubmitUserData = (userData: UserData): SubmitUserDataAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_SUBMIT_USER_DATA,
     [PROP_ACTION_PAYLOAD]: userData,
   };
 };
 
-export const onPutUserData = (
-  userData: UserDataActionPayload
-): PutUserDataAction => {
+export const onPutUserData = (userData: UserData): PutUserDataAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_PUT_USER_DATA,
     [PROP_ACTION_PAYLOAD]: userData,

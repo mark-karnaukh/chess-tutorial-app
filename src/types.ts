@@ -17,7 +17,7 @@ import {
   PROP_ERROR_CODE,
   PROP_ERROR_MESSAGE,
   PROP_DATA,
-  PROP_SELECTED_ITEM_ID,
+  PROP_SELECTED_LESSON_ID,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
   PROP_IS_LOADING,
@@ -31,11 +31,19 @@ import {
   PROP_TARGET_SQUARE,
   PROP_PIECE,
   PROP_FEN_STRING,
+  PROP_ID,
+  PROP_TITLE,
+  PROP_DESCRIPTION,
+  PROP_INITIAL_BOARD_POSITION,
+  PROP_CHECK_MOVES,
+  PROP_CREATED_BY,
+  PROP_CREATED_AT,
 } from './constants';
 
 // Imported types
 import { Square } from 'chess.js';
 import { Piece } from 'chessboardjsx';
+import { Moment } from 'moment';
 
 // Global state
 export interface UserState {
@@ -43,12 +51,12 @@ export interface UserState {
     [ERRORS_SIGN_IN]: Array<AuthError>;
     [ERRORS_SIGN_UP]: Array<AuthError>;
   };
-  [PROP_DATA]: UserDataActionPayload | {};
+  [PROP_DATA]: UserData | {};
   [PROP_IS_LOADING]: boolean;
 }
 
 export interface LessonsState {
-  [PROP_SELECTED_ITEM_ID]: number | null;
+  [PROP_SELECTED_LESSON_ID]: number | null;
   [PROP_DATA]: Object;
   [PROP_ERRORS]: Array<any>;
   [PROP_IS_LOADING]: boolean;
@@ -68,6 +76,25 @@ export interface GlobalState {
   [STATE_NOTIFICATION]: NotificationState;
 }
 
+// Data Models
+export interface UserData {
+  [PROP_FIRST_NAME]: string;
+  [PROP_LAST_NAME]: string;
+  [PROP_EMAIL]: string;
+  [PROP_USER_TYPE]: string;
+  [PROP_USER_ID]: string;
+}
+
+export interface LessonData {
+  [PROP_ID]?: string | null;
+  [PROP_TITLE]: string;
+  [PROP_DESCRIPTION]: string;
+  [PROP_INITIAL_BOARD_POSITION]: string;
+  [PROP_CHECK_MOVES]: Array<CheckMove>;
+  [PROP_CREATED_BY]: number;
+  [PROP_CREATED_AT]: Moment | null;
+}
+
 // Actions
 export interface SignInActionPayload {
   [PROP_EMAIL]: string;
@@ -83,14 +110,6 @@ export interface SignUpActionPayload {
 }
 
 export interface FetchUserDataActionPayload {
-  [PROP_USER_ID]: string;
-}
-
-export interface UserDataActionPayload {
-  [PROP_FIRST_NAME]: string;
-  [PROP_LAST_NAME]: string;
-  [PROP_EMAIL]: string;
-  [PROP_USER_TYPE]: string;
   [PROP_USER_ID]: string;
 }
 
@@ -129,12 +148,12 @@ export interface FetchUserDataAction {
 
 export interface SubmitUserDataAction {
   [PROP_ACTION_TYPE]: 'SUBMIT_USER_DATA';
-  [PROP_ACTION_PAYLOAD]: UserDataActionPayload;
+  [PROP_ACTION_PAYLOAD]: UserData;
 }
 
 export interface PutUserDataAction {
   [PROP_ACTION_TYPE]: 'PUT_USER_DATA';
-  [PROP_ACTION_PAYLOAD]: UserDataActionPayload;
+  [PROP_ACTION_PAYLOAD]: UserData;
 }
 
 export interface ClearUserDataAction {

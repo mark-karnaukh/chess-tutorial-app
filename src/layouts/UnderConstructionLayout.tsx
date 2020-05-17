@@ -51,7 +51,7 @@ export class UnderConstructionLayout extends PureComponent<Props> {
 
     return (
       <Container className={'d-flex flex-column layout profile-layout'} fluid>
-        <Row className={'nav-header'}>
+        <Row className={'nav-header bg-light'}>
           <Col>
             <NavHeader onSignOut={onSignOut} currentLocationPath={pathname} />
           </Col>
@@ -77,7 +77,7 @@ export class UnderConstructionLayout extends PureComponent<Props> {
             </div>
           </Jumbotron>
         </Row>
-        <Row className={'nav-footer'}>
+        <Row className={'nav-footer bg-light'}>
           <Col>
             <NavFooter />
           </Col>

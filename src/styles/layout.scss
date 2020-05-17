@@ -26,6 +26,18 @@
 
     .lessons-view {
       background-color: #e9ecef;
+
+      .no-lessons {
+        margin: unset;
+      }
+
+      .lessons-list {
+        flex-basis: 70%;
+      }
+
+      .lessons-button {
+        flex-basis: 25%;
+      }
     }
 
     .lessons-view,

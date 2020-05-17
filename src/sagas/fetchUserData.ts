@@ -5,10 +5,7 @@ import { takeLatest, put, delay, select } from 'redux-saga/effects';
 import moment from 'moment';
 
 // Types
-import {
-  FetchUserDataAction,
-  UserDataActionPayload as UserData,
-} from '../types';
+import { FetchUserDataAction, UserData } from '../types';
 
 // Constants
 import {

@@ -5,6 +5,7 @@ export { default as NavHeader } from './NavHeader';
 export { default as NavFooter } from './NavFooter';
 export { default as Notification } from './Notification';
 export { default as LessonInfo } from './LessonInfo';
+export { default as LessonList } from './LessonList';
 
 // Higher order components
 export { default as WithPrivateRoute } from './WithPrivateRoute';
