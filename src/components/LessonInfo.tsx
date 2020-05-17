@@ -342,7 +342,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
           <Form.File
             id="custom-file"
             label="Lesson instructions"
-            //   custom
+            // custom
             accept={'application/pdf,application/pptx'}
           />
         ) : (
@@ -422,7 +422,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
     } else {
       onPutNotification({
         [PROP_NOTIFICATION_HEADER]: 'Invalid Chess Move!',
-        [PROP_NOTIFICATION_BODY]: 'Please try again!',
+        [PROP_NOTIFICATION_BODY]: 'Please try again or make another one!',
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
         [PROP_DELAY_TIME]: 4000,
         [PROP_WITH_AUTO_HIDE]: true,
