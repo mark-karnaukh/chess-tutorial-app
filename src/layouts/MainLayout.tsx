@@ -13,16 +13,35 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import { NavHeader, NavFooter, LessonInfo, LessonList } from '../components';
 
 // Constants
-import { STATE_LESSONS } from '../constants';
-
-// Mock data
-import { lessons } from '../components/mockLessonsList';
+import {
+  STATE_LESSONS,
+  PROP_OPERATION_DATA,
+  PROP_OPERATION_TYPE,
+  PROP_SELECTED_LESSON,
+  PROP_SELECTED_LESSON_ID,
+  STATE_USER,
+} from '../constants';
 
 // Styles
 import '../styles/layout.scss';
 
 // Actions
-import { onSignOut, onPutNotification } from '../actions';
+import {
+  onSignOut,
+  onPutNotification,
+  onCreateLesson,
+  onDiscardOperation,
+} from '../actions';
+
+// Selectors
+import {
+  selectUserData$,
+  selectLessons$,
+  selectOperationData$,
+  selectOperationType$,
+  getSelectedLessonItem$,
+  getSelectedLessonItemId$,
+} from '../selectors';
 
 // Imported types
 import { Component } from 'react';
@@ -31,14 +50,27 @@ import {
   SignOutAction,
   PutNotificationAction,
   PutNotificationActionPayload as NotificationData,
+  CreateLessonAction,
+  LessonData,
+  GlobalState,
+  OperationType,
+  UserData,
+  DiscardOperationAction,
 } from '../types';
 import { Dispatch, AnyAction } from 'redux';
 
 // Local types
 export interface Props extends RouteComponentProps {
-  [STATE_LESSONS]: Array<any>;
+  [STATE_USER]: UserData;
+  [STATE_LESSONS]: Array<LessonData>;
+  [PROP_SELECTED_LESSON_ID]: string | null;
+  [PROP_SELECTED_LESSON]: LessonData | null;
+  [PROP_OPERATION_DATA]: LessonData | null;
+  [PROP_OPERATION_TYPE]: OperationType | null;
   onSignOut(): SignOutAction;
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
+  onCreateLesson(currentUserId: string): CreateLessonAction;
+  onDiscardOperation(): DiscardOperationAction;
 }
 
 export class MainLayout extends Component<Props> {
@@ -47,6 +79,13 @@ export class MainLayout extends Component<Props> {
       onSignOut,
       location: { pathname },
       onPutNotification,
+      onCreateLesson,
+      onDiscardOperation,
+      user: { userId },
+      operationType,
+      operationData,
+      selectedLessonId,
+      selectedLesson,
       lessons,
     } = this.props;
 
@@ -59,11 +98,21 @@ export class MainLayout extends Component<Props> {
         </Row>
         <Row className={'lessons-view'}>
           <Col lg={4} md={4} sm={4} className={'h-100 min-vw-25'}>
-            <LessonList lessons={lessons} selectedLessonId={'3'} />
+            <LessonList
+              lessons={lessons}
+              selectedLessonId={selectedLessonId}
+              onCreateLesson={() => onCreateLesson(userId)}
+              operationType={operationType}
+            />
           </Col>
           <Col className={'shadow h-100 overflow-auto'} lg={8} md={8} sm={8}>
-            {lessons.length ? (
-              <LessonInfo onPutNotification={onPutNotification} />
+            {operationData || selectedLesson ? (
+              <LessonInfo
+                onDiscardOperation={onDiscardOperation}
+                onPutNotification={onPutNotification}
+                lessonData={(operationData || selectedLesson) as LessonData}
+                operationType={operationType}
+              />
             ) : (
               <Jumbotron
                 className={
@@ -89,11 +138,19 @@ export class MainLayout extends Component<Props> {
   }
 }
 
-const mapStateToProps = () => ({
-  [STATE_LESSONS]: [...lessons],
+const mapStateToProps = (state: GlobalState) => ({
+  [STATE_USER]: selectUserData$(state) as UserData,
+  [STATE_LESSONS]: selectLessons$(state),
+  [PROP_OPERATION_DATA]: selectOperationData$(state),
+  [PROP_OPERATION_TYPE]: selectOperationType$(state),
+  [PROP_SELECTED_LESSON]: getSelectedLessonItem$(state),
+  [PROP_SELECTED_LESSON_ID]: getSelectedLessonItemId$(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
-  bindActionCreators({ onSignOut, onPutNotification }, dispatch);
+  bindActionCreators(
+    { onSignOut, onPutNotification, onCreateLesson, onDiscardOperation },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainLayout);

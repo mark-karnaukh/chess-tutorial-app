@@ -33,22 +33,28 @@ import {
   PROP_FEN_STRING,
   PROP_FROM,
   PROP_TO,
+  PROP_OPERATION_TYPE,
 } from '../constants';
 
 // Imported types
 import {
   PutNotificationAction,
   PutNotificationActionPayload as NotificationData,
+  DiscardOperationAction,
   Move,
   CheckMove,
   LessonData,
+  OperationType,
 } from '../types';
 import { PureComponent, ClipboardEvent, ChangeEvent } from 'react';
 import { ChessInstance } from 'chess.js';
 
 // Local types
 export interface Props {
+  [PROP_LESSON_DATA]: LessonData;
+  [PROP_OPERATION_TYPE]: OperationType | null;
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
+  onDiscardOperation(): DiscardOperationAction;
 }
 
 export interface State {
@@ -63,11 +69,12 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
   constructor(props: any) {
     super(props);
+    const { operationType } = this.props;
 
     this.game = new (require('chess.js'))();
 
     this.state = {
-      [PROP_IS_ADD_EDIT_MODE]: true,
+      [PROP_IS_ADD_EDIT_MODE]: !!operationType,
       [PROP_NEW_CHECK_MOVE]: null,
       [PROP_ACTUAL_BOARD_POSITION]: '',
       [PROP_LESSON_DATA]: {
@@ -75,7 +82,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
         [PROP_DESCRIPTION]: '',
         [PROP_INITIAL_BOARD_POSITION]: '',
         [PROP_CHECK_MOVES]: [],
-        [PROP_CREATED_BY]: 111,
+        [PROP_CREATED_BY]: null,
         [PROP_CREATED_AT]: null,
       },
     };
@@ -354,12 +361,20 @@ export default class LessonInfo extends PureComponent<Props, State> {
     );
   };
 
-  private renderPublishButton = (): JSX.Element => {
-    return (
-      <Row className={'mt-3 pr-3 d-flex justify-content-end'}>
-        <Button variant="success">Publish</Button>
+  private renderAddEditModeButtons = (): JSX.Element | null => {
+    const { onDiscardOperation } = this.props;
+    const { isAddEditMode } = this.state;
+
+    return isAddEditMode ? (
+      <Row className={'mt-5 pr-3 d-flex justify-content-around'}>
+        <Button variant="success" type="submit">
+          Publish
+        </Button>
+        <Button variant="dark" onClick={onDiscardOperation}>
+          Discard
+        </Button>
       </Row>
-    );
+    ) : null;
   };
 
   private onDropFigure = ({
@@ -593,7 +608,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
             {this.renderChessBoardStateInput()}
             {this.renderLessonDescriptionInput()}
             {this.renderLessonInstructionsInput()}
-            {this.renderPublishButton()}
+            {this.renderAddEditModeButtons()}
           </Col>
           {this.renderAddCheckMoveInputSection()}
         </Row>

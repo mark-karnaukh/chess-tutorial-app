@@ -19,15 +19,10 @@ import {
   STATE_USER,
   STATE_LESSONS,
   STATE_OPERATION,
-  PROP_OPERATION_DATA,
-  PROP_OPERATION_TYPE,
-  PROP_ERRORS,
-  PROP_DATA,
-  PROP_SELECTED_LESSON_ID,
-  ERRORS_SIGN_IN,
-  ERRORS_SIGN_UP,
-  PROP_IS_LOADING,
   STATE_NOTIFICATION,
+  defaultUserState,
+  defaultLessonsState,
+  defaultOperationState,
 } from './constants';
 
 // Types
@@ -45,24 +40,9 @@ if (!isProductionMode) {
 const appliedMiddleware = applyMiddleware(...middleware);
 
 export const initialState: GlobalState = {
-  [STATE_USER]: {
-    [PROP_ERRORS]: {
-      [ERRORS_SIGN_IN]: [],
-      [ERRORS_SIGN_UP]: [],
-    },
-    [PROP_DATA]: {},
-    [PROP_IS_LOADING]: false,
-  },
-  [STATE_LESSONS]: {
-    [PROP_SELECTED_LESSON_ID]: null,
-    [PROP_DATA]: {},
-    [PROP_ERRORS]: [],
-    [PROP_IS_LOADING]: false,
-  },
-  [STATE_OPERATION]: {
-    [PROP_OPERATION_TYPE]: null,
-    [PROP_OPERATION_DATA]: {},
-  },
+  [STATE_USER]: defaultUserState,
+  [STATE_LESSONS]: defaultLessonsState,
+  [STATE_OPERATION]: defaultOperationState,
   [STATE_NOTIFICATION]: null,
 };
 

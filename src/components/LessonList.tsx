@@ -10,20 +10,31 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 // Constants
-import { STATE_LESSONS, PROP_SELECTED_LESSON_ID } from '../constants';
+import {
+  STATE_LESSONS,
+  PROP_SELECTED_LESSON_ID,
+  PROP_OPERATION_TYPE,
+} from '../constants';
 
 // Imported types
 import { PureComponent } from 'react';
-import { LessonData } from '../types';
+import { LessonData, OperationType } from '../types';
 
 interface Props {
-  [PROP_SELECTED_LESSON_ID]: string;
+  [PROP_SELECTED_LESSON_ID]: string | null;
   [STATE_LESSONS]: Array<LessonData>;
+  [PROP_OPERATION_TYPE]: OperationType | null;
+  onCreateLesson(): void;
 }
 
 export default class LessonList extends PureComponent<Props> {
   render() {
-    const { lessons, selectedLessonId } = this.props;
+    const {
+      lessons,
+      selectedLessonId,
+      operationType,
+      onCreateLesson,
+    } = this.props;
 
     const isNoLessonsAvailable = !lessons.length;
 
@@ -63,6 +74,7 @@ export default class LessonList extends PureComponent<Props> {
                 <ListGroup.Item
                   as="li"
                   active={selectedLessonId === id || false}
+                  disabled={!!operationType}
                   //   variant="dark"
                 >
                   {title}
@@ -78,7 +90,12 @@ export default class LessonList extends PureComponent<Props> {
               : 'justify-content-around'
           } align-items-center`}
         >
-          <Button variant="success" className={'lessons-button'}>
+          <Button
+            variant="success"
+            className={'lessons-button'}
+            onClick={onCreateLesson}
+            disabled={!!operationType}
+          >
             Create
             <span className={'ml-2'} role={'img'} aria-label="add-icon">
               ➕
@@ -86,13 +103,21 @@ export default class LessonList extends PureComponent<Props> {
           </Button>
           {!isNoLessonsAvailable && (
             <React.Fragment>
-              <Button variant="warning" className={'lessons-button'}>
+              <Button
+                variant="warning"
+                className={'lessons-button'}
+                disabled={!!operationType}
+              >
                 Edit
                 <span className={'ml-2'} role={'img'} aria-label="edit-icon">
                   ✏️
                 </span>
               </Button>
-              <Button variant="danger" className={'lessons-button'}>
+              <Button
+                variant="danger"
+                className={'lessons-button'}
+                disabled={!!operationType}
+              >
                 Delete
                 <span className={'ml-2'} role={'img'} aria-label="delete-icon">
                   🗑️

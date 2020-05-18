@@ -28,13 +28,13 @@ import '../styles/auth-form.scss';
 
 // Imported types
 import { PureComponent, FormEvent } from 'react';
-import { SignUpAction, SignUpActionPayload, AuthError } from '../types';
+import { SignUpAction, SignUpActionPayload, FirebaseError } from '../types';
 
 // Local types
 interface Props {
   onSwitchForm(): void;
   onSignUp(signUpData: SignUpActionPayload): SignUpAction;
-  [PROP_ERRORS]: AuthError[];
+  [PROP_ERRORS]: FirebaseError[];
 }
 
 interface State extends SignUpActionPayload {

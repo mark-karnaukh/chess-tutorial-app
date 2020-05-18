@@ -2,7 +2,7 @@
 import {
   UserState,
   UserStateActions,
-  AuthError,
+  FirebaseError,
   AuthErrorGroup,
 } from '../types';
 
@@ -18,14 +18,11 @@ import {
   ERRORS_SIGN_IN,
   ERRORS_SIGN_UP,
   PROP_IS_LOADING,
+  defaultUserState,
 } from '../constants';
 
 export function userReducer(
-  state: UserState = {
-    [PROP_DATA]: {},
-    [PROP_ERRORS]: { [ERRORS_SIGN_IN]: [], [ERRORS_SIGN_UP]: [] },
-    [PROP_IS_LOADING]: false,
-  } as UserState,
+  state: UserState = defaultUserState as UserState,
   action: UserStateActions
 ): UserState {
   const { type, payload = {} } = action;
@@ -47,7 +44,7 @@ export function userReducer(
     const updatedErrorsGroup = Array.from(
       new Set(
         [
-          ...(errors[payloadKey as AuthErrorGroup] as AuthError[]),
+          ...(errors[payloadKey as AuthErrorGroup] as FirebaseError[]),
           payloadValue,
         ].map((error) => JSON.stringify(error))
       )

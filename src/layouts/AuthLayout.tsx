@@ -38,7 +38,7 @@ import {
 // Imported types
 import { Component } from 'react';
 import {
-  AuthError,
+  FirebaseError,
   SignInAction,
   SignInActionPayload,
   SignUpAction,
@@ -56,8 +56,8 @@ export interface Props extends RouteComponentProps {
   onClearAuthRequestErrors(): ClearAuthRequestErrorsAction;
   [PROP_IS_AUTHENTICATED]: boolean;
   [PROP_IS_LOADING]: boolean;
-  [ERRORS_SIGN_IN]: AuthError[];
-  [ERRORS_SIGN_UP]: AuthError[];
+  [ERRORS_SIGN_IN]: FirebaseError[];
+  [ERRORS_SIGN_UP]: FirebaseError[];
 }
 
 export interface State {

@@ -43,28 +43,26 @@ import {
 // Imported types
 import { Square } from 'chess.js';
 import { Piece } from 'chessboardjsx';
-import { Moment } from 'moment';
 
 // Global state
 export interface UserState {
   [PROP_ERRORS]: {
-    [ERRORS_SIGN_IN]: Array<AuthError>;
-    [ERRORS_SIGN_UP]: Array<AuthError>;
+    [ERRORS_SIGN_IN]: Array<FirebaseError>;
+    [ERRORS_SIGN_UP]: Array<FirebaseError>;
   };
   [PROP_DATA]: UserData | {};
   [PROP_IS_LOADING]: boolean;
 }
 
 export interface LessonsState {
-  [PROP_SELECTED_LESSON_ID]: number | null;
-  [PROP_DATA]: Object;
-  [PROP_ERRORS]: Array<any>;
+  [PROP_SELECTED_LESSON_ID]: string | null;
+  [PROP_DATA]: Array<LessonData>;
   [PROP_IS_LOADING]: boolean;
 }
 
 export interface OperationState {
-  [PROP_OPERATION_TYPE]: string | null;
-  [PROP_OPERATION_DATA]: Object;
+  [PROP_OPERATION_TYPE]: OperationType | null;
+  [PROP_OPERATION_DATA]: LessonData | null;
 }
 
 export type NotificationState = PutNotificationActionPayload | null;
@@ -91,8 +89,8 @@ export interface LessonData {
   [PROP_DESCRIPTION]: string;
   [PROP_INITIAL_BOARD_POSITION]: string;
   [PROP_CHECK_MOVES]: Array<CheckMove>;
-  [PROP_CREATED_BY]: number;
-  [PROP_CREATED_AT]: Moment | null;
+  [PROP_CREATED_BY]: string | null;
+  [PROP_CREATED_AT]: string | null;
 }
 
 // Actions
@@ -115,7 +113,7 @@ export interface FetchUserDataActionPayload {
 
 export type PutAuthRequestErrorActionPayload = Record<
   AuthErrorGroup,
-  AuthError
+  FirebaseError
 >;
 
 export interface PutNotificationActionPayload {
@@ -176,12 +174,24 @@ export interface ClearAuthRequestErrorsAction {
   [PROP_ACTION_PAYLOAD]: undefined;
 }
 
+export interface CreateLessonAction {
+  [PROP_ACTION_TYPE]: 'CREATE_LESSON';
+  [PROP_ACTION_PAYLOAD]: string;
+}
+
+export interface DiscardOperationAction {
+  [PROP_ACTION_TYPE]: 'DISCARD_OPERATION';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
 export type UserStateActions =
   | PutUserDataAction
   | PutAuthRequestErrorAction
   | ClearUserDataAction
   | ToggleUserDataLoadingAction
   | ClearAuthRequestErrorsAction;
+
+export type OperationStateActions = CreateLessonAction | DiscardOperationAction;
 
 export type NotificationStateActions =
   | PutNotificationAction
@@ -198,10 +208,12 @@ export interface ClearNotificationAction {
 }
 
 // Network request errors
-export interface AuthError extends Error {
+export interface FirebaseError extends Error {
   [PROP_ERROR_CODE]: string;
   [PROP_ERROR_MESSAGE]: string;
 }
+
+export type AuthErrorGroup = 'errorsSignIn' | 'errorsSignUp';
 
 // Chess Moves
 export interface Move {
@@ -214,4 +226,5 @@ export interface CheckMove extends Move {
   [PROP_FEN_STRING]: string;
 }
 
-export type AuthErrorGroup = 'errorsSignIn' | 'errorsSignUp';
+// Operation
+export type OperationType = 'create' | 'update';

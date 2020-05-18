@@ -32,6 +32,10 @@ export const ACTION_PUT_AUTH_REQUEST_ERROR = 'PUT_AUTH_REQUEST_ERROR';
 export const ACTION_CLEAR_AUTH_REQUEST_ERRORS = 'CLEAR_AUTH_REQUEST_ERRORS';
 export const ACTION_PUT_NOTIFICATION = 'PUT_NOTIFICATION';
 export const ACTION_CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION';
+export const ACTION_CREATE_LESSON = 'CREATE_LESSON';
+export const ACTION_UPDATE_LESSON = 'UPDATE_LESSON';
+export const ACTION_DELETE_LESSON = 'DELETE_LESSON';
+export const ACTION_DISCARD_OPERATION = 'DISCARD_OPERATION';
 
 // Action Props
 export const PROP_ACTION_TYPE = 'type';
@@ -83,6 +87,22 @@ export const PROP_FEN_STRING = 'fenStr';
 export const PROP_FROM = 'from';
 export const PROP_TO = 'to';
 
+// Operation
+export const PROP_OPERATION_CREATE = 'create';
+export const PROP_OPERATION_UPDATE = 'update';
+
+export const NEW_CREATE_OPERATION = {
+  [PROP_OPERATION_TYPE]: PROP_OPERATION_CREATE as 'create',
+  [PROP_OPERATION_DATA]: {
+    [PROP_TITLE]: '',
+    [PROP_DESCRIPTION]: '',
+    [PROP_INITIAL_BOARD_POSITION]: '',
+    [PROP_CHECK_MOVES]: [],
+    [PROP_CREATED_BY]: null,
+    [PROP_CREATED_AT]: null,
+  },
+};
+
 // Network Request Errors
 export const ERRORS_SIGN_IN = 'errorsSignIn';
 export const ERRORS_SIGN_UP = 'errorsSignUp';
@@ -115,5 +135,27 @@ export const PROP_COMPONENT = 'component';
 export const PROP_NEW_CHECK_MOVE = 'newCheckMove';
 export const PROP_ACTUAL_BOARD_POSITION = 'actualBoardPosition';
 export const PROP_LESSON_DATA = 'lessonData';
+export const PROP_SELECTED_LESSON = 'selectedLesson';
+
+// Default Global States
+export const defaultUserState = {
+  [PROP_ERRORS]: {
+    [ERRORS_SIGN_IN]: [],
+    [ERRORS_SIGN_UP]: [],
+  },
+  [PROP_DATA]: {},
+  [PROP_IS_LOADING]: false,
+};
+
+export const defaultLessonsState = {
+  [PROP_SELECTED_LESSON_ID]: null,
+  [PROP_DATA]: [],
+  [PROP_IS_LOADING]: false,
+};
+
+export const defaultOperationState = {
+  [PROP_OPERATION_TYPE]: null,
+  [PROP_OPERATION_DATA]: null,
+};
 
 /*****************************************************************************************/

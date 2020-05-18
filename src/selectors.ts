@@ -16,6 +16,9 @@ import {
   PROP_DATA,
   PROP_USER_ID,
   PROP_IS_LOADING,
+  PROP_OPERATION_DATA,
+  PROP_OPERATION_TYPE,
+  PROP_SELECTED_LESSON_ID,
 } from './constants';
 
 // General global state selectors
@@ -68,5 +71,35 @@ export const isLoading$ = createSelector(
     const { [PROP_IS_LOADING]: isLessonsDataLoading } = lessonsState;
 
     return isUserDataLoading || isLessonsDataLoading;
+  }
+);
+
+export const selectOperationData$ = createSelector(
+  selectOperationState$,
+  (operationState) => operationState[PROP_OPERATION_DATA]
+);
+
+export const selectOperationType$ = createSelector(
+  selectOperationState$,
+  (operationState) => operationState[PROP_OPERATION_TYPE]
+);
+
+export const selectLessons$ = createSelector(
+  selectLessonsState$,
+  (lessonsState) => lessonsState[PROP_DATA]
+);
+
+export const getSelectedLessonItemId$ = createSelector(
+  selectLessonsState$,
+  (lessonsState) => lessonsState[PROP_SELECTED_LESSON_ID]
+);
+
+export const getSelectedLessonItem$ = createSelector(
+  selectLessons$,
+  getSelectedLessonItemId$,
+  (lessons, selectedLessonId) => {
+    const selectedLesson = lessons.find(({ id }) => id === selectedLessonId);
+
+    return selectedLesson || null;
   }
 );

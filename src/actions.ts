@@ -12,6 +12,8 @@ import {
   ACTION_CLEAR_AUTH_REQUEST_ERRORS,
   ACTION_PUT_NOTIFICATION,
   ACTION_CLEAR_NOTIFICATION,
+  ACTION_CREATE_LESSON,
+  ACTION_DISCARD_OPERATION,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
 } from './constants';
@@ -33,10 +35,13 @@ import {
   PutAuthRequestErrorAction,
   PutAuthRequestErrorActionPayload,
   ClearAuthRequestErrorsAction,
-  AuthError,
+  FirebaseError,
   AuthErrorGroup,
   PutNotificationAction,
   PutNotificationActionPayload,
+  ClearNotificationAction,
+  CreateLessonAction,
+  DiscardOperationAction,
 } from './types';
 
 export const onSignIn = (signInData: SignInActionPayload): SignInAction => {
@@ -99,7 +104,7 @@ export const onToggleUserDataLoading = (): ToggleUserDataLoadingAction => {
 
 export const onPutAuthRequestError = (
   errorGroup: AuthErrorGroup,
-  error: AuthError
+  error: FirebaseError
 ): PutAuthRequestErrorAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_PUT_AUTH_REQUEST_ERROR,
@@ -125,9 +130,23 @@ export const onPutNotification = (
   };
 };
 
-export const onClearNotification = () => {
+export const onClearNotification = (): ClearNotificationAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_CLEAR_NOTIFICATION,
+    [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onCreateLesson = (currentUserId: string): CreateLessonAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_CREATE_LESSON,
+    [PROP_ACTION_PAYLOAD]: currentUserId,
+  };
+};
+
+export const onDiscardOperation = (): DiscardOperationAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_DISCARD_OPERATION,
     [PROP_ACTION_PAYLOAD]: undefined,
   };
 };

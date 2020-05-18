@@ -22,13 +22,13 @@ import '../styles/auth-form.scss';
 
 // Imported types
 import { PureComponent, FormEvent } from 'react';
-import { SignInAction, SignInActionPayload, AuthError } from '../types';
+import { SignInAction, SignInActionPayload, FirebaseError } from '../types';
 
 // Local types
 interface Props {
   onSwitchForm(): void;
   onSignIn(signInData: SignInActionPayload): SignInAction;
-  [PROP_ERRORS]: AuthError[];
+  [PROP_ERRORS]: FirebaseError[];
 }
 
 interface State extends SignInActionPayload {
