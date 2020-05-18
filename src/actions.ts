@@ -14,6 +14,7 @@ import {
   ACTION_CLEAR_NOTIFICATION,
   ACTION_CREATE_LESSON,
   ACTION_DISCARD_OPERATION,
+  ACTION_UPDATE_OPERATION_DATA,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
 } from './constants';
@@ -42,6 +43,8 @@ import {
   ClearNotificationAction,
   CreateLessonAction,
   DiscardOperationAction,
+  UpdateOperationDataAction,
+  UpdateOperationDataActionPayload,
 } from './types';
 
 export const onSignIn = (signInData: SignInActionPayload): SignInAction => {
@@ -148,5 +151,14 @@ export const onDiscardOperation = (): DiscardOperationAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_DISCARD_OPERATION,
     [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onUpdateOperationData = (
+  incomingUpdates: UpdateOperationDataActionPayload
+): UpdateOperationDataAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_UPDATE_OPERATION_DATA,
+    [PROP_ACTION_PAYLOAD]: incomingUpdates,
   };
 };

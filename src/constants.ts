@@ -36,6 +36,7 @@ export const ACTION_CREATE_LESSON = 'CREATE_LESSON';
 export const ACTION_UPDATE_LESSON = 'UPDATE_LESSON';
 export const ACTION_DELETE_LESSON = 'DELETE_LESSON';
 export const ACTION_DISCARD_OPERATION = 'DISCARD_OPERATION';
+export const ACTION_UPDATE_OPERATION_DATA = 'UPDATE_OPERATION_DATA';
 
 // Action Props
 export const PROP_ACTION_TYPE = 'type';
@@ -127,7 +128,6 @@ export const PROP_DELAY_TIME = 'delayTime';
 export const PROP_IS_AUTHENTICATED = 'isAuthenticated';
 export const PROP_IS_REGISTERED = 'isRegistered';
 export const PROP_IS_VALIDATED = 'isValidated';
-export const PROP_IS_ADD_EDIT_MODE = 'isAddEditMode';
 export const PROP_IS_OPEN = 'isOpen';
 export const PROP_IS_LOADING = 'isLoading';
 export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';

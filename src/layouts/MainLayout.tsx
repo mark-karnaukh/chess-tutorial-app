@@ -31,6 +31,7 @@ import {
   onPutNotification,
   onCreateLesson,
   onDiscardOperation,
+  onUpdateOperationData,
 } from '../actions';
 
 // Selectors
@@ -56,6 +57,8 @@ import {
   OperationType,
   UserData,
   DiscardOperationAction,
+  UpdateOperationDataAction,
+  UpdateOperationDataActionPayload as OperationData,
 } from '../types';
 import { Dispatch, AnyAction } from 'redux';
 
@@ -71,6 +74,7 @@ export interface Props extends RouteComponentProps {
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
   onCreateLesson(currentUserId: string): CreateLessonAction;
   onDiscardOperation(): DiscardOperationAction;
+  onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;
 }
 
 export class MainLayout extends Component<Props> {
@@ -81,6 +85,7 @@ export class MainLayout extends Component<Props> {
       onPutNotification,
       onCreateLesson,
       onDiscardOperation,
+      onUpdateOperationData,
       user: { userId },
       operationType,
       operationData,
@@ -110,6 +115,7 @@ export class MainLayout extends Component<Props> {
               <LessonInfo
                 onDiscardOperation={onDiscardOperation}
                 onPutNotification={onPutNotification}
+                onUpdateOperationData={onUpdateOperationData}
                 lessonData={(operationData || selectedLesson) as LessonData}
                 operationType={operationType}
               />
@@ -149,7 +155,13 @@ const mapStateToProps = (state: GlobalState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
   bindActionCreators(
-    { onSignOut, onPutNotification, onCreateLesson, onDiscardOperation },
+    {
+      onSignOut,
+      onPutNotification,
+      onCreateLesson,
+      onDiscardOperation,
+      onUpdateOperationData,
+    },
     dispatch
   );
 

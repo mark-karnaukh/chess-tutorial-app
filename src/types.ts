@@ -116,6 +116,11 @@ export type PutAuthRequestErrorActionPayload = Record<
   FirebaseError
 >;
 
+export type UpdateOperationDataActionPayload = Record<
+  'title' | 'description' | 'initialBoardPosition' | 'checkMoves',
+  string | CheckMove[]
+>;
+
 export interface PutNotificationActionPayload {
   [PROP_NOTIFICATION_HEADER]: string;
   [PROP_NOTIFICATION_BODY]: string;
@@ -191,7 +196,10 @@ export type UserStateActions =
   | ToggleUserDataLoadingAction
   | ClearAuthRequestErrorsAction;
 
-export type OperationStateActions = CreateLessonAction | DiscardOperationAction;
+export type OperationStateActions =
+  | CreateLessonAction
+  | DiscardOperationAction
+  | UpdateOperationDataAction;
 
 export type NotificationStateActions =
   | PutNotificationAction
@@ -205,6 +213,11 @@ export interface PutNotificationAction {
 export interface ClearNotificationAction {
   [PROP_ACTION_TYPE]: 'CLEAR_NOTIFICATION';
   [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export interface UpdateOperationDataAction {
+  [PROP_ACTION_TYPE]: 'UPDATE_OPERATION_DATA';
+  [PROP_ACTION_PAYLOAD]: UpdateOperationDataActionPayload;
 }
 
 // Network request errors

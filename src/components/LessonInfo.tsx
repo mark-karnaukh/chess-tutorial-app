@@ -12,7 +12,6 @@ import ChessBoard from 'chessboardjsx';
 
 // Constants
 import {
-  PROP_IS_ADD_EDIT_MODE,
   PROP_NEW_CHECK_MOVE,
   PROP_ACTUAL_BOARD_POSITION,
   PROP_LESSON_DATA,
@@ -25,8 +24,6 @@ import {
   PROP_DESCRIPTION,
   PROP_INITIAL_BOARD_POSITION,
   PROP_CHECK_MOVES,
-  PROP_CREATED_AT,
-  PROP_CREATED_BY,
   PROP_SOURCE_SQUARE,
   PROP_TARGET_SQUARE,
   PROP_PIECE,
@@ -34,6 +31,7 @@ import {
   PROP_FROM,
   PROP_TO,
   PROP_OPERATION_TYPE,
+  PROP_IS_VALIDATED,
 } from '../constants';
 
 // Imported types
@@ -41,12 +39,14 @@ import {
   PutNotificationAction,
   PutNotificationActionPayload as NotificationData,
   DiscardOperationAction,
+  UpdateOperationDataAction,
+  UpdateOperationDataActionPayload as OperationData,
   Move,
   CheckMove,
   LessonData,
   OperationType,
 } from '../types';
-import { PureComponent, ClipboardEvent, ChangeEvent } from 'react';
+import { PureComponent, ClipboardEvent, ChangeEvent, FormEvent } from 'react';
 import { ChessInstance } from 'chess.js';
 
 // Local types
@@ -55,13 +55,13 @@ export interface Props {
   [PROP_OPERATION_TYPE]: OperationType | null;
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
   onDiscardOperation(): DiscardOperationAction;
+  onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;
 }
 
 export interface State {
-  [PROP_IS_ADD_EDIT_MODE]: boolean;
   [PROP_NEW_CHECK_MOVE]: CheckMove | null;
   [PROP_ACTUAL_BOARD_POSITION]: string;
-  [PROP_LESSON_DATA]: LessonData;
+  [PROP_IS_VALIDATED]: boolean;
 }
 
 export default class LessonInfo extends PureComponent<Props, State> {
@@ -69,40 +69,30 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
   constructor(props: any) {
     super(props);
-    const { operationType } = this.props;
-
     this.game = new (require('chess.js'))();
 
     this.state = {
-      [PROP_IS_ADD_EDIT_MODE]: !!operationType,
       [PROP_NEW_CHECK_MOVE]: null,
       [PROP_ACTUAL_BOARD_POSITION]: '',
-      [PROP_LESSON_DATA]: {
-        [PROP_TITLE]: '',
-        [PROP_DESCRIPTION]: '',
-        [PROP_INITIAL_BOARD_POSITION]: '',
-        [PROP_CHECK_MOVES]: [],
-        [PROP_CREATED_BY]: null,
-        [PROP_CREATED_AT]: null,
-      },
+      [PROP_IS_VALIDATED]: false,
     };
   }
 
   public componentDidMount() {
-    const { lessonData } = this.state;
+    const { onUpdateOperationData } = this.props;
     const fenStr = this.game.fen();
 
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: fenStr,
-      [PROP_LESSON_DATA]: {
-        ...lessonData,
-        [PROP_INITIAL_BOARD_POSITION]: fenStr,
-      },
     });
+
+    onUpdateOperationData({
+      [PROP_INITIAL_BOARD_POSITION]: fenStr,
+    } as OperationData);
   }
 
   private renderLessonTitleInput = (): JSX.Element => {
-    const { isAddEditMode } = this.state;
+    const { operationType } = this.props;
 
     return (
       <Form.Group controlId="lesson.title" className={'w-100'}>
@@ -113,21 +103,34 @@ export default class LessonInfo extends PureComponent<Props, State> {
             size="sm"
             type="text"
             placeholder="Enter the lesson title"
-            readOnly={!isAddEditMode}
+            readOnly={!operationType}
             maxLength={150}
+            required={true}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              const newValue = event.target.value || '';
+              const { onUpdateOperationData } = this.props;
+
+              onUpdateOperationData({
+                [PROP_TITLE]: newValue,
+              } as OperationData);
+            }}
           />
+          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Please enter the lesson title!
+          </Form.Control.Feedback>
         </Col>
       </Form.Group>
     );
   };
 
   private renderChessBoard = (): JSX.Element => {
+    const { actualBoardPosition, newCheckMove } = this.state;
+
     const {
-      isAddEditMode,
-      actualBoardPosition,
-      newCheckMove,
+      operationType,
       [PROP_LESSON_DATA]: { checkMoves },
-    } = this.state;
+    } = this.props;
 
     // Generating a unique id to be set for component instance key attribute to fix issue with re-rendering
     const uniqueId =
@@ -141,12 +144,12 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
     return (
       <Row className={'d-flex justify-content-center mt-3'}>
-        {isAddEditMode && <h4>{actualStatus}</h4>}
+        {operationType && <h4>{actualStatus}</h4>}
         <ChessBoard
           key={uniqueId}
           position={actualBoardPosition}
-          sparePieces={isAddEditMode}
-          width={isAddEditMode ? 350 : 450}
+          sparePieces={!operationType}
+          width={operationType ? 350 : 450}
           getPosition={(position: any) => console.log('Position', position)}
           onDrop={this.onDropFigure}
         />
@@ -155,13 +158,14 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderChessBoardStateInput = (): JSX.Element | null => {
-    const {
-      isAddEditMode,
-      newCheckMove,
-      [PROP_LESSON_DATA]: { initialBoardPosition, checkMoves },
-    } = this.state;
+    const { newCheckMove } = this.state;
 
-    return isAddEditMode ? (
+    const {
+      operationType,
+      [PROP_LESSON_DATA]: { initialBoardPosition, checkMoves },
+    } = this.props;
+
+    return operationType ? (
       <Row className={'mt-3'}>
         <Form.Group controlId="lesson.description" className={'w-100 d-flex'}>
           <Col lg={8} md={8} sm={8}>
@@ -193,7 +197,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderLessonDescriptionInput = (): JSX.Element => {
-    const { isAddEditMode } = this.state;
+    const { operationType } = this.props;
 
     return (
       <Row className={'mt-3'}>
@@ -204,8 +208,21 @@ export default class LessonInfo extends PureComponent<Props, State> {
               as="textarea"
               rows={3}
               maxLength={500}
-              readOnly={!isAddEditMode}
+              readOnly={!operationType}
+              required={true}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                const newValue = event.target.value || '';
+                const { onUpdateOperationData } = this.props;
+
+                onUpdateOperationData({
+                  [PROP_DESCRIPTION]: newValue,
+                } as OperationData);
+              }}
             />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please enter the lesson description!
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
       </Row>
@@ -213,12 +230,13 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderAddCheckMoveInputSection = (): JSX.Element | null => {
-    const { newCheckMove, isAddEditMode } = this.state;
+    const { newCheckMove } = this.state;
+    const { operationType } = this.props;
 
     const { sourceSquare = '', targetSquare = '', piece = '' } =
       newCheckMove || {};
 
-    return isAddEditMode ? (
+    return operationType ? (
       <Col>
         <Row className={'mt-4 ml-4'}>
           <Button
@@ -237,6 +255,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 placeholder="Source Square"
                 size="sm"
                 readOnly={false}
+                required={true}
                 onChange={({
                   target: { value },
                 }: ChangeEvent<HTMLInputElement>) =>
@@ -249,6 +268,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 placeholder="Target Square"
                 size="sm"
                 readOnly={false}
+                required={true}
                 onChange={({
                   target: { value },
                 }: ChangeEvent<HTMLInputElement>) =>
@@ -261,6 +281,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 placeholder="Piece"
                 size="sm"
                 readOnly={false}
+                required={true}
                 onChange={({
                   target: { value },
                 }: ChangeEvent<HTMLInputElement>) =>
@@ -283,6 +304,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 variant="primary"
                 size="sm"
                 onClick={this.onAddNewCheckMove}
+                className={'text-truncate'}
               >
                 Add
                 <span className={'ml-2'} role={'img'} aria-label="add-icon">
@@ -295,6 +317,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
                 onClick={() => {
                   this.onSetNewCheckMove(true);
                 }}
+                className={'text-truncate'}
               >
                 Cancel
                 <span className={'ml-2'} role={'img'} aria-label="cancel-icon">
@@ -312,7 +335,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
   private renderCheckMovesList = (): JSX.Element => {
     const {
       [PROP_LESSON_DATA]: { checkMoves },
-    } = this.state;
+    } = this.props;
 
     return (
       <ListGroup className={'mt-5'}>
@@ -321,7 +344,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
           return (
             <ListGroup.Item
               key={index}
-              className={'d-flex justify-content-between'}
+              className={'d-flex justify-content-between ml-3'}
             >
               {`From: ${sourceSquare}, to: ${targetSquare}, piece: ${piece}`}
               {index === checkMoves.length - 1 && (
@@ -341,11 +364,11 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderLessonInstructionsInput = (): JSX.Element => {
-    const { isAddEditMode } = this.state;
+    const { operationType } = this.props;
 
     return (
       <Row className={'mt-3 pl-3'}>
-        {isAddEditMode ? (
+        {operationType ? (
           <Form.File
             id="custom-file"
             label="Lesson instructions"
@@ -362,10 +385,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderAddEditModeButtons = (): JSX.Element | null => {
-    const { onDiscardOperation } = this.props;
-    const { isAddEditMode } = this.state;
+    const { onDiscardOperation, operationType } = this.props;
 
-    return isAddEditMode ? (
+    return operationType ? (
       <Row className={'mt-5 pr-3 d-flex justify-content-around'}>
         <Button variant="success" type="submit">
           Publish
@@ -382,8 +404,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
     targetSquare,
     piece,
   }: Move): void => {
-    const { lessonData, newCheckMove } = this.state;
-    const { onPutNotification } = this.props;
+    const { newCheckMove } = this.state;
+    const { lessonData, onPutNotification, onUpdateOperationData } = this.props;
     const { checkMoves } = lessonData;
 
     if (!!Object.values(newCheckMove || {}).length) {
@@ -423,11 +445,11 @@ export default class LessonInfo extends PureComponent<Props, State> {
       if (!newCheckMove) {
         this.setState({
           [PROP_ACTUAL_BOARD_POSITION]: fenStr,
-          [PROP_LESSON_DATA]: {
-            ...lessonData,
-            [PROP_INITIAL_BOARD_POSITION]: fenStr,
-          },
         });
+
+        onUpdateOperationData({
+          [PROP_INITIAL_BOARD_POSITION]: fenStr,
+        } as OperationData);
       } else {
         this.setState({
           [PROP_ACTUAL_BOARD_POSITION]: fenStr,
@@ -446,7 +468,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private onResetChessBoardState = (): void => {
-    const { lessonData } = this.state;
+    const { onUpdateOperationData } = this.props;
 
     this.game.reset();
     const newFenStr = this.game.fen();
@@ -454,38 +476,41 @@ export default class LessonInfo extends PureComponent<Props, State> {
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: newFenStr,
       [PROP_NEW_CHECK_MOVE]: null,
-      [PROP_LESSON_DATA]: {
-        ...lessonData,
-        [PROP_INITIAL_BOARD_POSITION]: newFenStr,
-        [PROP_CHECK_MOVES]: [],
-      },
     });
+
+    Object.entries({
+      [PROP_INITIAL_BOARD_POSITION]: newFenStr,
+      [PROP_CHECK_MOVES]: [],
+    }).forEach(([key, value]) =>
+      onUpdateOperationData({ [key]: value } as OperationData)
+    );
   };
 
   private onSetChessBoardState = (
     event: ClipboardEvent<HTMLInputElement>
   ): void => {
-    const { lessonData } = this.state;
-
     const inputFenStr = event.clipboardData.getData('Text');
     const validatedFenStr = this.game.validate_fen(inputFenStr);
+    const { onUpdateOperationData } = this.props;
 
     if (validatedFenStr.valid) {
       this.setState({
         [PROP_ACTUAL_BOARD_POSITION]: inputFenStr,
-        [PROP_LESSON_DATA]: {
-          ...lessonData,
-          [PROP_INITIAL_BOARD_POSITION]: inputFenStr,
-          [PROP_CHECK_MOVES]: [],
-        },
       });
+
+      Object.entries({
+        [PROP_INITIAL_BOARD_POSITION]: inputFenStr,
+        [PROP_CHECK_MOVES]: [],
+      }).forEach(([key, value]) =>
+        onUpdateOperationData({ [key]: value } as OperationData)
+      );
 
       this.game.load(inputFenStr);
     } else {
       const { onPutNotification } = this.props;
 
       onPutNotification({
-        [PROP_NOTIFICATION_HEADER]: 'FEN String Input Error',
+        [PROP_NOTIFICATION_HEADER]: 'FEN String Parsing Error!',
         [PROP_NOTIFICATION_BODY]: validatedFenStr.error,
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
         [PROP_DELAY_TIME]: 4000,
@@ -506,7 +531,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
       ) {
         const {
           [PROP_LESSON_DATA]: { checkMoves, initialBoardPosition },
-        } = this.state;
+        } = this.props;
 
         if (!!checkMoves.length) {
           previousBoardPosition =
@@ -558,24 +583,18 @@ export default class LessonInfo extends PureComponent<Props, State> {
       this.onDropFigure({ sourceSquare, targetSquare, piece });
     }
 
-    const { lessonData } = this.state;
+    const { lessonData, onUpdateOperationData } = this.props;
     const { checkMoves } = lessonData;
 
-    this.setState({
-      [PROP_LESSON_DATA]: {
-        ...lessonData,
-        [PROP_CHECK_MOVES]: [
-          ...checkMoves,
-          this.state.newCheckMove,
-        ] as CheckMove[],
-      },
-    });
+    onUpdateOperationData({
+      [PROP_CHECK_MOVES]: [...checkMoves, this.state.newCheckMove],
+    } as OperationData);
 
     this.onSetNewCheckMove();
   };
 
   private onDiscardLastCheckMove = (): void => {
-    const { lessonData } = this.state;
+    const { lessonData, onUpdateOperationData } = this.props;
     const { checkMoves } = lessonData;
     const { initialBoardPosition } = lessonData;
 
@@ -591,16 +610,49 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: newActualBoardPosition,
-      [PROP_LESSON_DATA]: {
-        ...lessonData,
-        [PROP_CHECK_MOVES]: updatedCheckMoves,
-      },
     });
+
+    onUpdateOperationData({
+      [PROP_CHECK_MOVES]: updatedCheckMoves,
+    } as OperationData);
+  };
+
+  private onHandleSubmitData = (e: FormEvent<HTMLFormElement>) => {
+    const { lessonData, onPutNotification } = this.props;
+    const form = e.currentTarget;
+
+    const { checkMoves } = lessonData;
+
+    e.preventDefault();
+
+    if (form.checkValidity() === false) {
+      return this.setState({ [PROP_IS_VALIDATED]: true });
+    }
+
+    if (!checkMoves.length) {
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: 'Data Submit Error!',
+        [PROP_NOTIFICATION_BODY]:
+          'Please add at least one check move before submitting your changes!',
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_DELAY_TIME]: 2000,
+        [PROP_WITH_AUTO_HIDE]: true,
+      });
+
+      return;
+    }
   };
 
   render() {
+    const { isValidated } = this.state;
+
     return (
-      <Form className={'p-3 overflow-auto'}>
+      <Form
+        className={'p-3 overflow-auto'}
+        noValidate
+        validated={isValidated}
+        onSubmit={this.onHandleSubmitData}
+      >
         <Row>
           <Col>
             {this.renderLessonTitleInput()}
