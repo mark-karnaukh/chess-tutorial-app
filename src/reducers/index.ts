@@ -13,12 +13,11 @@ import {
 import { userReducer } from './userReducer';
 import { operationReducer } from './operationReducer';
 import { notificationReducer } from './notificationReducer';
+import { lessonsReducer } from './lessonsReducer';
 
 export const rootReducer = combineReducers({
   [STATE_USER]: userReducer,
-  [STATE_LESSONS]: (state = {}, action) => {
-    return state;
-  },
+  [STATE_LESSONS]: lessonsReducer,
   [STATE_OPERATION]: operationReducer,
   [STATE_NOTIFICATION]: notificationReducer,
 });

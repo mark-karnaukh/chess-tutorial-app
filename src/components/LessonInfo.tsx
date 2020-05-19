@@ -41,6 +41,7 @@ import {
   DiscardOperationAction,
   UpdateOperationDataAction,
   UpdateOperationDataActionPayload as OperationData,
+  SubmitLessonDataAction,
   Move,
   CheckMove,
   LessonData,
@@ -56,6 +57,7 @@ export interface Props {
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
   onDiscardOperation(): DiscardOperationAction;
   onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;
+  onSubmitLessonData(): SubmitLessonDataAction;
 }
 
 export interface State {
@@ -79,20 +81,33 @@ export default class LessonInfo extends PureComponent<Props, State> {
   }
 
   public componentDidMount() {
-    const { onUpdateOperationData } = this.props;
-    const fenStr = this.game.fen();
+    const { onUpdateOperationData, operationType, lessonData } = this.props;
+    const { initialBoardPosition } = lessonData;
 
-    this.setState({
-      [PROP_ACTUAL_BOARD_POSITION]: fenStr,
-    });
+    if (!!operationType) {
+      const fenStr = this.game.fen();
 
-    onUpdateOperationData({
-      [PROP_INITIAL_BOARD_POSITION]: fenStr,
-    } as OperationData);
+      this.setState({
+        [PROP_ACTUAL_BOARD_POSITION]: fenStr,
+      });
+
+      onUpdateOperationData({
+        [PROP_INITIAL_BOARD_POSITION]: fenStr,
+      } as OperationData);
+    } else {
+      this.setState({
+        [PROP_ACTUAL_BOARD_POSITION]: initialBoardPosition,
+      });
+
+      this.game.load(initialBoardPosition);
+    }
   }
 
   private renderLessonTitleInput = (): JSX.Element => {
-    const { operationType } = this.props;
+    const {
+      operationType,
+      lessonData: { title },
+    } = this.props;
 
     return (
       <Form.Group controlId="lesson.title" className={'w-100'}>
@@ -106,6 +121,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
             readOnly={!operationType}
             maxLength={150}
             required={true}
+            value={title}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               const newValue = event.target.value || '';
               const { onUpdateOperationData } = this.props;
@@ -167,7 +183,10 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
     return operationType ? (
       <Row className={'mt-3'}>
-        <Form.Group controlId="lesson.description" className={'w-100 d-flex'}>
+        <Form.Group
+          controlId="lesson.chessBoardStateInput"
+          className={'w-100 d-flex'}
+        >
           <Col lg={8} md={8} sm={8}>
             <Form.Control
               onPaste={this.onSetChessBoardState}
@@ -197,7 +216,10 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private renderLessonDescriptionInput = (): JSX.Element => {
-    const { operationType } = this.props;
+    const {
+      operationType,
+      lessonData: { description },
+    } = this.props;
 
     return (
       <Row className={'mt-3'}>
@@ -209,6 +231,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
               rows={3}
               maxLength={500}
               readOnly={!operationType}
+              value={description}
               required={true}
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 const newValue = event.target.value || '';
@@ -405,7 +428,12 @@ export default class LessonInfo extends PureComponent<Props, State> {
     piece,
   }: Move): void => {
     const { newCheckMove } = this.state;
-    const { lessonData, onPutNotification, onUpdateOperationData } = this.props;
+    const {
+      lessonData,
+      operationType,
+      onPutNotification,
+      onUpdateOperationData,
+    } = this.props;
     const { checkMoves } = lessonData;
 
     if (!!Object.values(newCheckMove || {}).length) {
@@ -421,7 +449,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
       return;
     }
 
-    if (!!checkMoves.length && !newCheckMove) {
+    if (operationType && !!checkMoves.length && !newCheckMove) {
       onPutNotification({
         [PROP_NOTIFICATION_HEADER]: 'Chess Move Failed!',
         [PROP_NOTIFICATION_BODY]: `Please click on the "Set New Check Move" button to set a new check move or 
@@ -618,7 +646,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private onHandleSubmitData = (e: FormEvent<HTMLFormElement>) => {
-    const { lessonData, onPutNotification } = this.props;
+    const { lessonData, onPutNotification, onSubmitLessonData } = this.props;
     const form = e.currentTarget;
 
     const { checkMoves } = lessonData;
@@ -641,6 +669,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
       return;
     }
+
+    onSubmitLessonData();
   };
 
   render() {

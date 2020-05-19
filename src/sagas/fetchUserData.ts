@@ -27,6 +27,7 @@ import {
   onToggleUserDataLoading,
   onPutAuthRequestError,
   onPutNotification,
+  onFetchLessonsData,
 } from '../actions';
 
 // Firebase
@@ -69,5 +70,7 @@ export function* onFetchUserData(action: FetchUserDataAction) {
         [PROP_WITH_AUTO_HIDE]: true,
       })
     );
+
+    yield put(onFetchLessonsData());
   }
 }

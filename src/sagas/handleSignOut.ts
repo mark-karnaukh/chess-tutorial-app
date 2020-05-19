@@ -42,12 +42,11 @@ export function* onHandleSignOut(action: SignOutAction) {
   } catch (error) {
     yield put(
       onPutNotification({
-        [PROP_NOTIFICATION_HEADER]: `Sign Out Error ${error[PROP_ERROR_CODE]}!`,
+        [PROP_NOTIFICATION_HEADER]: `Sign Out Error: ${error[PROP_ERROR_CODE]}!`,
         [PROP_NOTIFICATION_BODY]: error[PROP_ERROR_MESSAGE],
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
         [PROP_DELAY_TIME]: 4000,
       })
     );
-    console.log(error);
   }
 }

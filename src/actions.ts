@@ -4,7 +4,9 @@ import {
   ACTION_SIGN_UP,
   ACTION_SIGN_OUT,
   ACTION_FETCH_USER_DATA,
+  ACTION_FETCH_LESSONS_DATA,
   ACTION_SUBMIT_USER_DATA,
+  ACTION_SUBMIT_LESSON_DATA,
   ACTION_PUT_USER_DATA,
   ACTION_CLEAR_USER_DATA,
   ACTION_TOGGLE_USER_DATA_LOADING,
@@ -15,8 +17,11 @@ import {
   ACTION_CREATE_LESSON,
   ACTION_DISCARD_OPERATION,
   ACTION_UPDATE_OPERATION_DATA,
+  ACTION_TOGGLE_LESSON_DATA_LOADING,
   PROP_ACTION_TYPE,
   PROP_ACTION_PAYLOAD,
+  ACTION_PUT_LESSONS_DATA,
+  ACTION_SELECT_LESSON,
 } from './constants';
 
 // Types
@@ -28,11 +33,15 @@ import {
   SignOutAction,
   FetchUserDataAction,
   FetchUserDataActionPayload,
+  FetchLessonsDataAction,
   SubmitUserDataAction,
+  SubmitLessonDataAction,
   PutUserDataAction,
+  PutLessonsDataAction,
   UserData,
   ClearUserDataAction,
   ToggleUserDataLoadingAction,
+  ToggleLessonDataLoadingAction,
   PutAuthRequestErrorAction,
   PutAuthRequestErrorActionPayload,
   ClearAuthRequestErrorsAction,
@@ -45,6 +54,8 @@ import {
   DiscardOperationAction,
   UpdateOperationDataAction,
   UpdateOperationDataActionPayload,
+  LessonData,
+  SelectLessonAction,
 } from './types';
 
 export const onSignIn = (signInData: SignInActionPayload): SignInAction => {
@@ -77,6 +88,13 @@ export const onFetchUserData = (
   };
 };
 
+export const onFetchLessonsData = (): FetchLessonsDataAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_FETCH_LESSONS_DATA,
+    [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
 export const onSubmitUserData = (userData: UserData): SubmitUserDataAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_SUBMIT_USER_DATA,
@@ -91,6 +109,22 @@ export const onPutUserData = (userData: UserData): PutUserDataAction => {
   };
 };
 
+export const onPutLessonsData = (
+  lessonsData: LessonData[]
+): PutLessonsDataAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_PUT_LESSONS_DATA,
+    [PROP_ACTION_PAYLOAD]: lessonsData,
+  };
+};
+
+export const onSelectLesson = (lessonId: string): SelectLessonAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_SELECT_LESSON,
+    [PROP_ACTION_PAYLOAD]: lessonId,
+  };
+};
+
 export const onClearUserData = (): ClearUserDataAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_CLEAR_USER_DATA,
@@ -101,6 +135,13 @@ export const onClearUserData = (): ClearUserDataAction => {
 export const onToggleUserDataLoading = (): ToggleUserDataLoadingAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_TOGGLE_USER_DATA_LOADING,
+    [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onToggleLessonDataLoading = (): ToggleLessonDataLoadingAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_TOGGLE_LESSON_DATA_LOADING,
     [PROP_ACTION_PAYLOAD]: undefined,
   };
 };
@@ -160,5 +201,12 @@ export const onUpdateOperationData = (
   return {
     [PROP_ACTION_TYPE]: ACTION_UPDATE_OPERATION_DATA,
     [PROP_ACTION_PAYLOAD]: incomingUpdates,
+  };
+};
+
+export const onSubmitLessonData = (): SubmitLessonDataAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_SUBMIT_LESSON_DATA,
+    [PROP_ACTION_PAYLOAD]: undefined,
   };
 };

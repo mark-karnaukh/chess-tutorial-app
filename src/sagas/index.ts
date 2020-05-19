@@ -8,6 +8,8 @@ import { onWatchSignOut } from './handleSignOut';
 import { onWatchSubmitUserData } from './submitUserData';
 import { onWatchFetchUserData } from './fetchUserData';
 import { onWatchPutNotification } from './showNotification';
+import { onWatchSubmitLessonData } from './submitLessonData';
+import { onWatchFetchLessonsData } from './fetchLessonsData';
 
 export const rootSaga = function* rootSaga() {
   yield all([
@@ -17,5 +19,7 @@ export const rootSaga = function* rootSaga() {
     fork(onWatchSubmitUserData),
     fork(onWatchFetchUserData),
     fork(onWatchPutNotification),
+    fork(onWatchSubmitLessonData),
+    fork(onWatchFetchLessonsData),
   ]);
 };

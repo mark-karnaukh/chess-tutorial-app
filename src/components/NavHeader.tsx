@@ -3,7 +3,6 @@ import React from 'react';
 
 // Imported types
 import { PureComponent } from 'react';
-import { SignOutAction } from '../types';
 
 // Components
 import Navbar from 'react-bootstrap/Navbar';
@@ -25,7 +24,7 @@ import Logo from '../assets/chess-logo.png';
 
 // Local types
 interface Props {
-  onSignOut(): SignOutAction;
+  onSignOut(): void;
   [PROP_CURRENT_LOCATION_PATH]: string;
 }
 

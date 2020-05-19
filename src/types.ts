@@ -37,7 +37,7 @@ import {
   PROP_INITIAL_BOARD_POSITION,
   PROP_CHECK_MOVES,
   PROP_CREATED_BY,
-  PROP_CREATED_AT,
+  PROP_MODIFIED_AT,
 } from './constants';
 
 // Imported types
@@ -90,7 +90,7 @@ export interface LessonData {
   [PROP_INITIAL_BOARD_POSITION]: string;
   [PROP_CHECK_MOVES]: Array<CheckMove>;
   [PROP_CREATED_BY]: string | null;
-  [PROP_CREATED_AT]: string | null;
+  [PROP_MODIFIED_AT]: string | null;
 }
 
 // Actions
@@ -149,6 +149,16 @@ export interface FetchUserDataAction {
   [PROP_ACTION_PAYLOAD]: FetchUserDataActionPayload;
 }
 
+export interface FetchLessonsDataAction {
+  [PROP_ACTION_TYPE]: 'FETCH_LESSONS_DATA';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export interface SelectLessonAction {
+  [PROP_ACTION_TYPE]: 'SELECT_LESSON';
+  [PROP_ACTION_PAYLOAD]: string;
+}
+
 export interface SubmitUserDataAction {
   [PROP_ACTION_TYPE]: 'SUBMIT_USER_DATA';
   [PROP_ACTION_PAYLOAD]: UserData;
@@ -159,6 +169,11 @@ export interface PutUserDataAction {
   [PROP_ACTION_PAYLOAD]: UserData;
 }
 
+export interface PutLessonsDataAction {
+  [PROP_ACTION_TYPE]: 'PUT_LESSONS_DATA';
+  [PROP_ACTION_PAYLOAD]: LessonData[];
+}
+
 export interface ClearUserDataAction {
   [PROP_ACTION_TYPE]: 'CLEAR_USER_DATA';
   [PROP_ACTION_PAYLOAD]: undefined;
@@ -166,6 +181,11 @@ export interface ClearUserDataAction {
 
 export interface ToggleUserDataLoadingAction {
   [PROP_ACTION_TYPE]: 'TOGGLE_USER_DATA_LOADING';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export interface ToggleLessonDataLoadingAction {
+  [PROP_ACTION_TYPE]: 'TOGGLE_LESSON_DATA_LOADING';
   [PROP_ACTION_PAYLOAD]: undefined;
 }
 
@@ -201,6 +221,11 @@ export type OperationStateActions =
   | DiscardOperationAction
   | UpdateOperationDataAction;
 
+export type LessonsStateActions =
+  | ToggleLessonDataLoadingAction
+  | PutLessonsDataAction
+  | SelectLessonAction;
+
 export type NotificationStateActions =
   | PutNotificationAction
   | ClearNotificationAction;
@@ -218,6 +243,11 @@ export interface ClearNotificationAction {
 export interface UpdateOperationDataAction {
   [PROP_ACTION_TYPE]: 'UPDATE_OPERATION_DATA';
   [PROP_ACTION_PAYLOAD]: UpdateOperationDataActionPayload;
+}
+
+export interface SubmitLessonDataAction {
+  [PROP_ACTION_TYPE]: 'SUBMIT_LESSON_DATA';
+  [PROP_ACTION_PAYLOAD]: undefined;
 }
 
 // Network request errors

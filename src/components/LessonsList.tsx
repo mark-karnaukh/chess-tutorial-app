@@ -14,26 +14,32 @@ import {
   STATE_LESSONS,
   PROP_SELECTED_LESSON_ID,
   PROP_OPERATION_TYPE,
+  PROP_USER_TYPE,
+  TYPE_TEACHER,
 } from '../constants';
 
 // Imported types
 import { PureComponent } from 'react';
-import { LessonData, OperationType } from '../types';
+import { LessonData, OperationType, SelectLessonAction } from '../types';
 
 interface Props {
   [PROP_SELECTED_LESSON_ID]: string | null;
+  [PROP_USER_TYPE]: string;
   [STATE_LESSONS]: Array<LessonData>;
   [PROP_OPERATION_TYPE]: OperationType | null;
   onCreateLesson(): void;
+  onSelectLesson(lessonId: string): SelectLessonAction;
 }
 
-export default class LessonList extends PureComponent<Props> {
+export default class LessonsList extends PureComponent<Props> {
   render() {
     const {
+      userType,
       lessons,
       selectedLessonId,
       operationType,
       onCreateLesson,
+      onSelectLesson,
     } = this.props;
 
     const isNoLessonsAvailable = !lessons.length;
@@ -75,6 +81,9 @@ export default class LessonList extends PureComponent<Props> {
                   as="li"
                   active={selectedLessonId === id || false}
                   disabled={!!operationType}
+                  onClick={() => {
+                    !operationType && onSelectLesson(id as string);
+                  }}
                   //   variant="dark"
                 >
                   {title}
@@ -83,49 +92,55 @@ export default class LessonList extends PureComponent<Props> {
             })}
           </ListGroup>
         </Col>
-        <Col
-          className={`pt-3 pb-3 d-flex ${
-            isNoLessonsAvailable
-              ? 'justify-content-start'
-              : 'justify-content-around'
-          } align-items-center`}
-        >
-          <Button
-            variant="success"
-            className={'lessons-button'}
-            onClick={onCreateLesson}
-            disabled={!!operationType}
+        {userType === TYPE_TEACHER ? (
+          <Col
+            className={`pt-3 pb-3 d-flex ${
+              isNoLessonsAvailable
+                ? 'justify-content-start'
+                : 'justify-content-around'
+            } align-items-center`}
           >
-            Create
-            <span className={'ml-2'} role={'img'} aria-label="add-icon">
-              ➕
-            </span>
-          </Button>
-          {!isNoLessonsAvailable && (
-            <React.Fragment>
-              <Button
-                variant="warning"
-                className={'lessons-button'}
-                disabled={!!operationType}
-              >
-                Edit
-                <span className={'ml-2'} role={'img'} aria-label="edit-icon">
-                  ✏️
-                </span>
-              </Button>
-              <Button
-                variant="danger"
-                className={'lessons-button'}
-                disabled={!!operationType}
-              >
-                Delete
-                <span className={'ml-2'} role={'img'} aria-label="delete-icon">
-                  🗑️
-                </span>
-              </Button>
-            </React.Fragment>
-          )}
-        </Col>
+            <Button
+              variant="success"
+              className={'lessons-button'}
+              onClick={onCreateLesson}
+              disabled={!!operationType}
+            >
+              Create
+              <span className={'ml-2'} role={'img'} aria-label="add-icon">
+                ➕
+              </span>
+            </Button>
+            {!isNoLessonsAvailable && (
+              <React.Fragment>
+                <Button
+                  variant="warning"
+                  className={'lessons-button'}
+                  disabled={!!operationType}
+                >
+                  Edit
+                  <span className={'ml-2'} role={'img'} aria-label="edit-icon">
+                    ✏️
+                  </span>
+                </Button>
+                <Button
+                  variant="danger"
+                  className={'lessons-button'}
+                  disabled={!!operationType}
+                >
+                  Delete
+                  <span
+                    className={'ml-2'}
+                    role={'img'}
+                    aria-label="delete-icon"
+                  >
+                    🗑️
+                  </span>
+                </Button>
+              </React.Fragment>
+            )}
+          </Col>
+        ) : null}
       </Row>
     );
   }

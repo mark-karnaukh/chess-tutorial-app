@@ -37,6 +37,11 @@ export const ACTION_UPDATE_LESSON = 'UPDATE_LESSON';
 export const ACTION_DELETE_LESSON = 'DELETE_LESSON';
 export const ACTION_DISCARD_OPERATION = 'DISCARD_OPERATION';
 export const ACTION_UPDATE_OPERATION_DATA = 'UPDATE_OPERATION_DATA';
+export const ACTION_SUBMIT_LESSON_DATA = 'SUBMIT_LESSON_DATA';
+export const ACTION_TOGGLE_LESSON_DATA_LOADING = 'TOGGLE_LESSON_DATA_LOADING';
+export const ACTION_FETCH_LESSONS_DATA = 'FETCH_LESSONS_DATA';
+export const ACTION_PUT_LESSONS_DATA = 'PUT_LESSONS_DATA';
+export const ACTION_SELECT_LESSON = 'SELECT_LESSON';
 
 // Action Props
 export const PROP_ACTION_TYPE = 'type';
@@ -74,7 +79,7 @@ export const PROP_DESCRIPTION = 'description';
 export const PROP_INITIAL_BOARD_POSITION = 'initialBoardPosition';
 export const PROP_CHECK_MOVES = 'checkMoves';
 export const PROP_CREATED_BY = 'createdBy';
-export const PROP_CREATED_AT = 'createdAt';
+export const PROP_MODIFIED_AT = 'modifiedAt';
 
 // User Types
 export const TYPE_TEACHER = 'teacher';
@@ -100,7 +105,7 @@ export const NEW_CREATE_OPERATION = {
     [PROP_INITIAL_BOARD_POSITION]: '',
     [PROP_CHECK_MOVES]: [],
     [PROP_CREATED_BY]: null,
-    [PROP_CREATED_AT]: null,
+    [PROP_MODIFIED_AT]: null,
   },
 };
 
@@ -154,6 +159,7 @@ export const defaultLessonsState = {
 };
 
 export const defaultOperationState = {
+  [PROP_ACTUAL_BOARD_POSITION]: null,
   [PROP_OPERATION_TYPE]: null,
   [PROP_OPERATION_DATA]: null,
 };
