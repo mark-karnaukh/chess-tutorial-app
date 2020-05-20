@@ -32,6 +32,7 @@ import {
   PROP_TO,
   PROP_OPERATION_TYPE,
   PROP_IS_VALIDATED,
+  PROP_USER_TYPE,
 } from '../constants';
 
 // Imported types
@@ -54,6 +55,7 @@ import { ChessInstance } from 'chess.js';
 export interface Props {
   [PROP_LESSON_DATA]: LessonData;
   [PROP_OPERATION_TYPE]: OperationType | null;
+  [PROP_USER_TYPE]: string;
   onPutNotification(notificationData: NotificationData): PutNotificationAction;
   onDiscardOperation(): DiscardOperationAction;
   onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;

@@ -20,17 +20,18 @@ import { NavHeader, NavFooter } from '../components';
 import '../styles/layout.scss';
 
 // Actions
-import { onSignOut } from '../actions';
+import { onSignOut, onDiscardOperation } from '../actions';
 
 // Imported types
 import { PureComponent } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { SignOutAction } from '../types';
+import { SignOutAction, DiscardOperationAction } from '../types';
 import { Dispatch, AnyAction } from 'redux';
 
 // Local types
 export interface Props extends RouteComponentProps {
   onSignOut(): SignOutAction;
+  onDiscardOperation(): DiscardOperationAction;
 }
 
 export class UnderConstructionLayout extends PureComponent<Props> {
@@ -46,6 +47,7 @@ export class UnderConstructionLayout extends PureComponent<Props> {
   render() {
     const {
       onSignOut,
+      onDiscardOperation,
       location: { pathname },
     } = this.props;
 
@@ -53,7 +55,13 @@ export class UnderConstructionLayout extends PureComponent<Props> {
       <Container className={'d-flex flex-column layout profile-layout'} fluid>
         <Row className={'nav-header bg-light'}>
           <Col>
-            <NavHeader onSignOut={onSignOut} currentLocationPath={pathname} />
+            <NavHeader
+              onSignOut={() => {
+                onSignOut();
+                onDiscardOperation();
+              }}
+              currentLocationPath={pathname}
+            />
           </Col>
         </Row>
         <Row className={'profile-view'}>
@@ -88,6 +96,6 @@ export class UnderConstructionLayout extends PureComponent<Props> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
-  bindActionCreators({ onSignOut }, dispatch);
+  bindActionCreators({ onSignOut, onDiscardOperation }, dispatch);
 
 export default connect(null, mapDispatchToProps)(UnderConstructionLayout);

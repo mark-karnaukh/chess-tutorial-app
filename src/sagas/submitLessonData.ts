@@ -84,6 +84,21 @@ export function* onSubmitLessonData(action: SubmitLessonDataAction) {
   }
 
   if (!isFailed) {
+    yield put(
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: `${
+          operationType === PROP_OPERATION_CREATE
+            ? 'Lesson Create Success'
+            : 'Lesson Update Success'
+        }!`,
+        [PROP_NOTIFICATION_BODY]: `Lesson ${
+          operationType === PROP_OPERATION_CREATE ? 'created' : 'updated'
+        } successfully!`,
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_DELAY_TIME]: 4000,
+      })
+    );
+
     yield put(onDiscardOperation());
 
     yield put(onFetchLessonsData());

@@ -33,7 +33,7 @@ export const ACTION_CLEAR_AUTH_REQUEST_ERRORS = 'CLEAR_AUTH_REQUEST_ERRORS';
 export const ACTION_PUT_NOTIFICATION = 'PUT_NOTIFICATION';
 export const ACTION_CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION';
 export const ACTION_CREATE_LESSON = 'CREATE_LESSON';
-export const ACTION_UPDATE_LESSON = 'UPDATE_LESSON';
+export const ACTION_EDIT_LESSON = 'EDIT_LESSON';
 export const ACTION_DELETE_LESSON = 'DELETE_LESSON';
 export const ACTION_DISCARD_OPERATION = 'DISCARD_OPERATION';
 export const ACTION_UPDATE_OPERATION_DATA = 'UPDATE_OPERATION_DATA';
@@ -141,6 +141,7 @@ export const PROP_NEW_CHECK_MOVE = 'newCheckMove';
 export const PROP_ACTUAL_BOARD_POSITION = 'actualBoardPosition';
 export const PROP_LESSON_DATA = 'lessonData';
 export const PROP_SELECTED_LESSON = 'selectedLesson';
+export const PROP_SEARCH_TERM = 'searchTerm';
 
 // Default Global States
 export const defaultUserState = {

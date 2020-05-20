@@ -15,12 +15,19 @@ import {
   PROP_SELECTED_LESSON_ID,
   PROP_OPERATION_TYPE,
   PROP_USER_TYPE,
+  PROP_SEARCH_TERM,
   TYPE_TEACHER,
+  PROP_TITLE,
 } from '../constants';
 
 // Imported types
-import { PureComponent } from 'react';
-import { LessonData, OperationType, SelectLessonAction } from '../types';
+import { PureComponent, ChangeEvent } from 'react';
+import {
+  LessonData,
+  OperationType,
+  SelectLessonAction,
+  DeleteLessonAction,
+} from '../types';
 
 interface Props {
   [PROP_SELECTED_LESSON_ID]: string | null;
@@ -29,9 +36,27 @@ interface Props {
   [PROP_OPERATION_TYPE]: OperationType | null;
   onCreateLesson(): void;
   onSelectLesson(lessonId: string): SelectLessonAction;
+  onDeleteLesson(): DeleteLessonAction;
+  onEditLesson(): void;
 }
 
-export default class LessonsList extends PureComponent<Props> {
+export interface State {
+  [PROP_SEARCH_TERM]: string;
+}
+
+export default class LessonsList extends PureComponent<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = { [PROP_SEARCH_TERM]: '' };
+  }
+
+  private onSearchForLesson = (event: ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value || '';
+
+    this.setState({ [PROP_SEARCH_TERM]: value });
+  };
+
   render() {
     const {
       userType,
@@ -40,9 +65,18 @@ export default class LessonsList extends PureComponent<Props> {
       operationType,
       onCreateLesson,
       onSelectLesson,
+      onDeleteLesson,
+      onEditLesson,
     } = this.props;
 
+    const { searchTerm } = this.state;
+
     const isNoLessonsAvailable = !lessons.length;
+    const filteredLessons = !searchTerm
+      ? lessons
+      : lessons.filter((lesson) =>
+          lesson[PROP_TITLE].toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
     return (
       <Row className={'flex-column flex-nowrap h-100 lessons-list-wrapper'}>
@@ -57,6 +91,7 @@ export default class LessonsList extends PureComponent<Props> {
                     ? 'Search For Lesson...'
                     : 'No Lessons To Search...'
                 }
+                onChange={this.onSearchForLesson}
                 disabled={isNoLessonsAvailable}
                 aria-describedby="inputGroupSearch"
                 required
@@ -73,7 +108,7 @@ export default class LessonsList extends PureComponent<Props> {
         </Col>
         <Col className={'pt-3 overflow-auto lessons-list'}>
           <ListGroup as="ul">
-            {lessons.map((lesson) => {
+            {filteredLessons.map((lesson) => {
               const { title, id } = lesson;
 
               return (
@@ -84,6 +119,7 @@ export default class LessonsList extends PureComponent<Props> {
                   onClick={() => {
                     !operationType && onSelectLesson(id as string);
                   }}
+                  key={id as string}
                   //   variant="dark"
                 >
                   {title}
@@ -117,6 +153,7 @@ export default class LessonsList extends PureComponent<Props> {
                   variant="warning"
                   className={'lessons-button'}
                   disabled={!!operationType}
+                  onClick={onEditLesson}
                 >
                   Edit
                   <span className={'ml-2'} role={'img'} aria-label="edit-icon">
@@ -127,6 +164,7 @@ export default class LessonsList extends PureComponent<Props> {
                   variant="danger"
                   className={'lessons-button'}
                   disabled={!!operationType}
+                  onClick={onDeleteLesson}
                 >
                   Delete
                   <span

@@ -9,10 +9,13 @@ import {
 // Constants
 import {
   ACTION_CREATE_LESSON,
+  ACTION_EDIT_LESSON,
   ACTION_DISCARD_OPERATION,
   ACTION_UPDATE_OPERATION_DATA,
   NEW_CREATE_OPERATION,
+  PROP_OPERATION_TYPE,
   PROP_OPERATION_DATA,
+  PROP_OPERATION_UPDATE,
   PROP_CREATED_BY,
   defaultOperationState,
 } from '../constants';
@@ -33,6 +36,11 @@ export function operationReducer(
           ...operationData,
           [PROP_CREATED_BY]: payload as string,
         },
+      };
+    case ACTION_EDIT_LESSON:
+      return {
+        [PROP_OPERATION_TYPE]: PROP_OPERATION_UPDATE,
+        [PROP_OPERATION_DATA]: payload as LessonData,
       };
     case ACTION_UPDATE_OPERATION_DATA:
       const [key, value] = Object.entries(

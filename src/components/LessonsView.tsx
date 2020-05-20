@@ -34,6 +34,8 @@ import {
   UpdateOperationDataAction,
   SubmitLessonDataAction,
   SelectLessonAction,
+  DeleteLessonAction,
+  EditLessonAction,
 } from '../types';
 
 export interface Props {
@@ -51,6 +53,8 @@ export interface Props {
   onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;
   onSubmitLessonData(): SubmitLessonDataAction;
   onSelectLesson(lessonId: string): SelectLessonAction;
+  onDeleteLesson(): DeleteLessonAction;
+  onEditLesson(selectedLesson: LessonData): EditLessonAction;
 }
 
 export class LessonsView extends PureComponent<Props> {
@@ -69,6 +73,8 @@ export class LessonsView extends PureComponent<Props> {
       onSubmitLessonData,
       onUpdateOperationData,
       onSelectLesson,
+      onDeleteLesson,
+      onEditLesson,
     } = this.props;
 
     return (
@@ -79,13 +85,16 @@ export class LessonsView extends PureComponent<Props> {
             lessons={lessons}
             selectedLessonId={selectedLessonId}
             onCreateLesson={() => onCreateLesson(userId)}
+            onEditLesson={() => onEditLesson(selectedLesson as LessonData)}
             onSelectLesson={onSelectLesson}
+            onDeleteLesson={onDeleteLesson}
             operationType={operationType}
           />
         </Col>
         <Col className={'shadow h-100 overflow-auto'} lg={8} md={8} sm={8}>
           {operationData || selectedLesson ? (
             <LessonInfo
+              userType={userType}
               onSubmitLessonData={onSubmitLessonData}
               onDiscardOperation={onDiscardOperation}
               onPutNotification={onPutNotification}

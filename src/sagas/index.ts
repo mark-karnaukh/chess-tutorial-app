@@ -10,6 +10,7 @@ import { onWatchFetchUserData } from './fetchUserData';
 import { onWatchPutNotification } from './showNotification';
 import { onWatchSubmitLessonData } from './submitLessonData';
 import { onWatchFetchLessonsData } from './fetchLessonsData';
+import { onWatchDeleteLesson } from './deleteLesson';
 
 export const rootSaga = function* rootSaga() {
   yield all([
@@ -21,5 +22,6 @@ export const rootSaga = function* rootSaga() {
     fork(onWatchPutNotification),
     fork(onWatchSubmitLessonData),
     fork(onWatchFetchLessonsData),
+    fork(onWatchDeleteLesson),
   ]);
 };

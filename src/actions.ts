@@ -18,10 +18,12 @@ import {
   ACTION_DISCARD_OPERATION,
   ACTION_UPDATE_OPERATION_DATA,
   ACTION_TOGGLE_LESSON_DATA_LOADING,
-  PROP_ACTION_TYPE,
-  PROP_ACTION_PAYLOAD,
   ACTION_PUT_LESSONS_DATA,
   ACTION_SELECT_LESSON,
+  ACTION_DELETE_LESSON,
+  ACTION_EDIT_LESSON,
+  PROP_ACTION_TYPE,
+  PROP_ACTION_PAYLOAD,
 } from './constants';
 
 // Types
@@ -56,6 +58,8 @@ import {
   UpdateOperationDataActionPayload,
   LessonData,
   SelectLessonAction,
+  DeleteLessonAction,
+  EditLessonAction,
 } from './types';
 
 export const onSignIn = (signInData: SignInActionPayload): SignInAction => {
@@ -208,5 +212,19 @@ export const onSubmitLessonData = (): SubmitLessonDataAction => {
   return {
     [PROP_ACTION_TYPE]: ACTION_SUBMIT_LESSON_DATA,
     [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onDeleteLesson = (): DeleteLessonAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_DELETE_LESSON,
+    [PROP_ACTION_PAYLOAD]: undefined,
+  };
+};
+
+export const onEditLesson = (selectedLesson: LessonData): EditLessonAction => {
+  return {
+    [PROP_ACTION_TYPE]: ACTION_EDIT_LESSON,
+    [PROP_ACTION_PAYLOAD]: selectedLesson,
   };
 };

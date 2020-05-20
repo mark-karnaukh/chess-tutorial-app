@@ -218,6 +218,7 @@ export type UserStateActions =
 
 export type OperationStateActions =
   | CreateLessonAction
+  | EditLessonAction
   | DiscardOperationAction
   | UpdateOperationDataAction;
 
@@ -243,6 +244,16 @@ export interface ClearNotificationAction {
 export interface UpdateOperationDataAction {
   [PROP_ACTION_TYPE]: 'UPDATE_OPERATION_DATA';
   [PROP_ACTION_PAYLOAD]: UpdateOperationDataActionPayload;
+}
+
+export interface DeleteLessonAction {
+  [PROP_ACTION_TYPE]: 'DELETE_LESSON';
+  [PROP_ACTION_PAYLOAD]: undefined;
+}
+
+export interface EditLessonAction {
+  [PROP_ACTION_TYPE]: 'EDIT_LESSON';
+  [PROP_ACTION_PAYLOAD]: LessonData;
 }
 
 export interface SubmitLessonDataAction {

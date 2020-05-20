@@ -41,8 +41,8 @@ export default class Notification extends PureComponent<Props, State> {
           autohide={withAutoHide}
           style={{
             position: 'absolute',
-            top: '45%',
-            left: '45%',
+            top: '55%',
+            left: '40%',
             width: '35%',
             zIndex: 5,
           }}

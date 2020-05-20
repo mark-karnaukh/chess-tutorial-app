@@ -34,6 +34,8 @@ import {
   onUpdateOperationData,
   onSubmitLessonData,
   onSelectLesson,
+  onDeleteLesson,
+  onEditLesson,
 } from '../actions';
 
 // Selectors
@@ -64,6 +66,8 @@ import {
   DiscardOperationAction,
   UpdateOperationDataAction,
   UpdateOperationDataActionPayload as OperationData,
+  DeleteLessonAction,
+  EditLessonAction,
 } from '../types';
 import { Dispatch, AnyAction } from 'redux';
 
@@ -83,6 +87,8 @@ export interface Props extends RouteComponentProps {
   onUpdateOperationData(updates: OperationData): UpdateOperationDataAction;
   onSubmitLessonData(): SubmitLessonDataAction;
   onSelectLesson(lessonId: string): SelectLessonAction;
+  onDeleteLesson(): DeleteLessonAction;
+  onEditLesson(selectedLesson: LessonData): EditLessonAction;
 }
 
 export class MainLayout extends Component<Props> {
@@ -96,6 +102,8 @@ export class MainLayout extends Component<Props> {
       onUpdateOperationData,
       onSubmitLessonData,
       onSelectLesson,
+      onDeleteLesson,
+      onEditLesson,
       user: { userId, userType },
       operationType,
       operationData,
@@ -133,6 +141,8 @@ export class MainLayout extends Component<Props> {
           onSubmitLessonData={onSubmitLessonData}
           onUpdateOperationData={onUpdateOperationData}
           onSelectLesson={onSelectLesson}
+          onDeleteLesson={onDeleteLesson}
+          onEditLesson={onEditLesson}
         />
         <Row className={'nav-footer bg-light'}>
           <Col>
@@ -164,6 +174,8 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
       onUpdateOperationData,
       onSubmitLessonData,
       onSelectLesson,
+      onDeleteLesson,
+      onEditLesson,
     },
     dispatch
   );
