@@ -56,7 +56,7 @@ export default class Notification extends PureComponent<Props, State> {
             <strong className="mr-auto">{notificationHeader}</strong>
             <small>{formattedDateTime}</small>
           </Toast.Header>
-          <Toast.Body>{notificationBody}</Toast.Body>
+          <Toast.Body className={'ml-2'}>{notificationBody}</Toast.Body>
         </Toast>
       </div>
     );

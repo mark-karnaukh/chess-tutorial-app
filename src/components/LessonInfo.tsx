@@ -69,11 +69,11 @@ export interface State {
 }
 
 export default class LessonInfo extends PureComponent<Props, State> {
-  private game: ChessInstance;
+  private game: ChessInstance | null;
 
   constructor(props: any) {
     super(props);
-    this.game = new (require('chess.js'))();
+    this.game = null;
 
     this.state = {
       [PROP_NEW_CHECK_MOVE]: null,
@@ -83,25 +83,27 @@ export default class LessonInfo extends PureComponent<Props, State> {
   }
 
   public componentDidMount() {
-    const { onUpdateOperationData, operationType, lessonData } = this.props;
-    const { initialBoardPosition } = lessonData;
+    this.initializeChessGameState();
+  }
 
-    if (!!operationType) {
-      const fenStr = this.game.fen();
+  public componentDidUpdate(prevProps: Readonly<Props>) {
+    const {
+      operationType: currentOperationType,
+      lessonData: { id: currentLessonId },
+    } = this.props;
 
-      this.setState({
-        [PROP_ACTUAL_BOARD_POSITION]: fenStr,
-      });
+    const {
+      operationType: previousOperationType,
+      lessonData: { id: previousLessonId },
+    } = prevProps;
 
-      onUpdateOperationData({
-        [PROP_INITIAL_BOARD_POSITION]: fenStr,
-      } as OperationData);
-    } else {
-      this.setState({
-        [PROP_ACTUAL_BOARD_POSITION]: initialBoardPosition,
-      });
+    const isSelectedLessonChanged = previousLessonId !== currentLessonId;
+    const isOperationTypeChanged =
+      previousOperationType !== currentOperationType;
 
-      this.game.load(initialBoardPosition);
+    if (isSelectedLessonChanged || isOperationTypeChanged) {
+      this.resetChessGameState();
+      this.initializeChessGameState();
     }
   }
 
@@ -417,7 +419,13 @@ export default class LessonInfo extends PureComponent<Props, State> {
         <Button variant="success" type="submit">
           Publish
         </Button>
-        <Button variant="dark" onClick={onDiscardOperation}>
+        <Button
+          variant="dark"
+          onClick={() => {
+            onDiscardOperation();
+            this.resetChessGameState();
+          }}
+        >
           Discard
         </Button>
       </Row>
@@ -464,13 +472,13 @@ export default class LessonInfo extends PureComponent<Props, State> {
       return;
     }
 
-    let move = this.game.move({
+    let move = (this.game as ChessInstance).move({
       [PROP_FROM]: sourceSquare,
       [PROP_TO]: targetSquare,
     });
 
     if (move) {
-      const fenStr = this.game.fen();
+      const fenStr = (this.game as ChessInstance).fen();
 
       if (!newCheckMove) {
         this.setState({
@@ -500,8 +508,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
   private onResetChessBoardState = (): void => {
     const { onUpdateOperationData } = this.props;
 
-    this.game.reset();
-    const newFenStr = this.game.fen();
+    this.game?.reset();
+    const newFenStr = (this.game as ChessInstance).fen();
 
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: newFenStr,
@@ -520,7 +528,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
     event: ClipboardEvent<HTMLInputElement>
   ): void => {
     const inputFenStr = event.clipboardData.getData('Text');
-    const validatedFenStr = this.game.validate_fen(inputFenStr);
+    const validatedFenStr = (this.game as ChessInstance).validate_fen(
+      inputFenStr
+    );
     const { onUpdateOperationData } = this.props;
 
     if (validatedFenStr.valid) {
@@ -535,7 +545,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
         onUpdateOperationData({ [key]: value } as OperationData)
       );
 
-      this.game.load(inputFenStr);
+      this.game?.load(inputFenStr);
     } else {
       const { onPutNotification } = this.props;
 
@@ -571,7 +581,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
         }
       }
 
-      previousBoardPosition && this.game.load(previousBoardPosition);
+      previousBoardPosition &&
+        (this.game as ChessInstance).load(previousBoardPosition);
 
       return {
         [PROP_NEW_CHECK_MOVE]: (!newCheckMove ? {} : null) as CheckMove,
@@ -636,7 +647,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
         ? initialBoardPosition
         : updatedCheckMoves[lastCheckMoveIndex][PROP_FEN_STRING];
 
-    this.game.load(newActualBoardPosition);
+    this.game?.load(newActualBoardPosition);
 
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: newActualBoardPosition,
@@ -673,6 +684,52 @@ export default class LessonInfo extends PureComponent<Props, State> {
     }
 
     onSubmitLessonData();
+    this.resetChessGameState();
+  };
+
+  private initializeChessGameState = (): void => {
+    if (!this.game) {
+      const {
+        onUpdateOperationData,
+        operationType,
+        lessonData: { initialBoardPosition, checkMoves },
+      } = this.props;
+
+      const Chess = require('chess.js');
+
+      this.game = !!initialBoardPosition
+        ? new Chess(initialBoardPosition)
+        : new Chess();
+
+      const fenStr = (this.game as ChessInstance).fen();
+
+      this.setState({
+        [PROP_ACTUAL_BOARD_POSITION]: fenStr,
+      });
+
+      !initialBoardPosition &&
+        onUpdateOperationData({
+          [PROP_INITIAL_BOARD_POSITION]: fenStr,
+        } as OperationData);
+
+      if (!!checkMoves.length && !!operationType) {
+        const newFenStr = checkMoves[checkMoves.length - 1][PROP_FEN_STRING];
+
+        this.game?.load(newFenStr);
+
+        this.setState({
+          [PROP_ACTUAL_BOARD_POSITION]: newFenStr,
+        });
+      }
+    }
+  };
+
+  private resetChessGameState = (): void => {
+    this.game = null;
+
+    this.setState({
+      [PROP_ACTUAL_BOARD_POSITION]: '',
+    });
   };
 
   render() {

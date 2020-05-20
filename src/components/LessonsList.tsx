@@ -116,6 +116,7 @@ export default class LessonsList extends PureComponent<Props, State> {
                   as="li"
                   active={selectedLessonId === id || false}
                   disabled={!!operationType}
+                  className={'text-truncate'}
                   onClick={() => {
                     !operationType && onSelectLesson(id as string);
                   }}
@@ -138,7 +139,7 @@ export default class LessonsList extends PureComponent<Props, State> {
           >
             <Button
               variant="success"
-              className={'lessons-button'}
+              className={'lessons-button text-truncate'}
               onClick={onCreateLesson}
               disabled={!!operationType}
             >
@@ -151,7 +152,7 @@ export default class LessonsList extends PureComponent<Props, State> {
               <React.Fragment>
                 <Button
                   variant="warning"
-                  className={'lessons-button'}
+                  className={'lessons-button text-truncate'}
                   disabled={!!operationType}
                   onClick={onEditLesson}
                 >
@@ -162,7 +163,7 @@ export default class LessonsList extends PureComponent<Props, State> {
                 </Button>
                 <Button
                   variant="danger"
-                  className={'lessons-button'}
+                  className={'lessons-button text-truncate'}
                   disabled={!!operationType}
                   onClick={onDeleteLesson}
                 >

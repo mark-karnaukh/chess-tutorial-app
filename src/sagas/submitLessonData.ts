@@ -91,7 +91,7 @@ export function* onSubmitLessonData(action: SubmitLessonDataAction) {
             ? 'Lesson Create Success'
             : 'Lesson Update Success'
         }!`,
-        [PROP_NOTIFICATION_BODY]: `Lesson ${
+        [PROP_NOTIFICATION_BODY]: `Lesson was ${
           operationType === PROP_OPERATION_CREATE ? 'created' : 'updated'
         } successfully!`,
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),

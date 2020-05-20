@@ -62,6 +62,15 @@ export function* onDeleteLesson(action: DeleteLessonAction) {
   }
 
   if (!isFailed) {
+    yield put(
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: `Lesson Delete Successful!`,
+        [PROP_NOTIFICATION_BODY]: 'Lesson was deleted successfully.',
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_DELAY_TIME]: 4000,
+      })
+    );
+
     yield put(onFetchLessonsData());
   }
 }
