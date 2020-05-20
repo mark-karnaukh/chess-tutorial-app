@@ -33,6 +33,7 @@ import {
   PROP_OPERATION_TYPE,
   PROP_IS_VALIDATED,
   PROP_USER_TYPE,
+  PROP_CHESS_MOVES_COUNT,
 } from '../constants';
 
 // Imported types
@@ -66,6 +67,7 @@ export interface State {
   [PROP_NEW_CHECK_MOVE]: CheckMove | null;
   [PROP_ACTUAL_BOARD_POSITION]: string;
   [PROP_IS_VALIDATED]: boolean;
+  [PROP_CHESS_MOVES_COUNT]: number;
 }
 
 export default class LessonInfo extends PureComponent<Props, State> {
@@ -79,6 +81,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
       [PROP_NEW_CHECK_MOVE]: null,
       [PROP_ACTUAL_BOARD_POSITION]: '',
       [PROP_IS_VALIDATED]: false,
+      [PROP_CHESS_MOVES_COUNT]: 0,
     };
   }
 
@@ -168,7 +171,8 @@ export default class LessonInfo extends PureComponent<Props, State> {
         <ChessBoard
           key={uniqueId}
           position={actualBoardPosition}
-          sparePieces={!operationType}
+          sparePieces={!!operationType}
+          allowDrag={this.allowDrag}
           width={operationType ? 350 : 450}
           getPosition={(position: any) => console.log('Position', position)}
           onDrop={this.onDropFigure}
@@ -437,7 +441,7 @@ export default class LessonInfo extends PureComponent<Props, State> {
     targetSquare,
     piece,
   }: Move): void => {
-    const { newCheckMove } = this.state;
+    const { newCheckMove, chessMovesCount } = this.state;
     const {
       lessonData,
       operationType,
@@ -479,6 +483,88 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
     if (move) {
       const fenStr = (this.game as ChessInstance).fen();
+
+      if (!operationType) {
+        const { fenStr: checkMoveFenStr } = checkMoves[chessMovesCount];
+
+        this.setState({
+          [PROP_ACTUAL_BOARD_POSITION]: fenStr,
+        });
+
+        if (checkMoveFenStr !== fenStr) {
+          let previousBoardPosition: string;
+
+          if (chessMovesCount === 0) {
+            previousBoardPosition = lessonData[PROP_INITIAL_BOARD_POSITION];
+          } else {
+            previousBoardPosition =
+              checkMoves[chessMovesCount - 1][PROP_FEN_STRING];
+          }
+
+          setTimeout(() => {
+            onPutNotification({
+              [PROP_NOTIFICATION_HEADER]: 'Wrong Chess Move!',
+              [PROP_NOTIFICATION_BODY]:
+                'Please read careful the lesson description or take a look at the lesson instruction (if available).',
+              [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+              [PROP_DELAY_TIME]: 4000,
+              [PROP_WITH_AUTO_HIDE]: true,
+            });
+
+            this.setState({
+              [PROP_ACTUAL_BOARD_POSITION]: previousBoardPosition,
+            });
+
+            this.game?.load(previousBoardPosition);
+          }, 1000);
+        } else {
+          const { chessMovesCount } = this.state;
+
+          let nextMove = chessMovesCount + 1;
+
+          setTimeout(() => {
+            onPutNotification({
+              [PROP_NOTIFICATION_HEADER]: 'Well done!',
+              [PROP_NOTIFICATION_BODY]:
+                "You're one step closer to the goal! Good job!",
+              [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+              [PROP_DELAY_TIME]: 4000,
+              [PROP_WITH_AUTO_HIDE]: true,
+            });
+
+            if (this.game?.turn() === 'b' && !!checkMoves[nextMove]) {
+              const { fenStr: nextBoardPosition } = checkMoves[nextMove];
+
+              this.setState({
+                [PROP_ACTUAL_BOARD_POSITION]: nextBoardPosition,
+              });
+
+              this.game?.load(nextBoardPosition);
+
+              nextMove = nextMove + 1;
+            }
+
+            this.setState({ [PROP_CHESS_MOVES_COUNT]: nextMove });
+
+            if (nextMove === checkMoves.length) {
+              setTimeout(() => {
+                onPutNotification({
+                  [PROP_NOTIFICATION_HEADER]: 'Congrats!',
+                  [PROP_NOTIFICATION_BODY]:
+                    'You are done with this lesson! Go and try another one!',
+                  [PROP_FORMATTED_DATE_TIME]: moment().format(
+                    'DD/MM/YYYY HH:mm'
+                  ),
+                  [PROP_DELAY_TIME]: 4000,
+                  [PROP_WITH_AUTO_HIDE]: true,
+                });
+              }, 1000);
+            }
+          }, 1000);
+        }
+
+        return;
+      }
 
       if (!newCheckMove) {
         this.setState({
@@ -749,7 +835,23 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
     this.setState({
       [PROP_ACTUAL_BOARD_POSITION]: '',
+      [PROP_CHESS_MOVES_COUNT]: 0,
     });
+  };
+
+  private allowDrag = () => {
+    const {
+      lessonData: { checkMoves },
+      operationType,
+    } = this.props;
+
+    const { chessMovesCount } = this.state;
+
+    if (!operationType) {
+      return chessMovesCount !== checkMoves.length;
+    }
+
+    return true;
   };
 
   render() {

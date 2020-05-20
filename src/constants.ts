@@ -138,6 +138,7 @@ export const PROP_IS_LOADING = 'isLoading';
 export const PROP_CURRENT_LOCATION_PATH = 'currentLocationPath';
 export const PROP_COMPONENT = 'component';
 export const PROP_NEW_CHECK_MOVE = 'newCheckMove';
+export const PROP_CHESS_MOVES_COUNT = 'chessMovesCount';
 export const PROP_ACTUAL_BOARD_POSITION = 'actualBoardPosition';
 export const PROP_LESSON_DATA = 'lessonData';
 export const PROP_SELECTED_LESSON = 'selectedLesson';
