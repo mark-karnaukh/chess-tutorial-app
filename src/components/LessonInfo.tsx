@@ -497,7 +497,9 @@ export default class LessonInfo extends PureComponent<Props, State> {
     } else {
       onPutNotification({
         [PROP_NOTIFICATION_HEADER]: 'Invalid Chess Move!',
-        [PROP_NOTIFICATION_BODY]: 'Please try again or make another one!',
+        [PROP_NOTIFICATION_BODY]: `Please try again or make another one! Move a next figure from the ${
+          this.game?.turn() === 'b' ? 'black' : 'white'
+        } side.`,
         [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
         [PROP_DELAY_TIME]: 4000,
         [PROP_WITH_AUTO_HIDE]: true,
@@ -561,6 +563,28 @@ export default class LessonInfo extends PureComponent<Props, State> {
 
   private onSetNewCheckMove = (isUnset?: boolean): void => {
     const { newCheckMove } = this.state;
+    const {
+      [PROP_LESSON_DATA]: { checkMoves, initialBoardPosition },
+    } = this.props;
+    if (
+      !isUnset &&
+      !newCheckMove &&
+      !checkMoves.length &&
+      this.game?.turn() === 'b'
+    ) {
+      const { onPutNotification } = this.props;
+
+      onPutNotification({
+        [PROP_NOTIFICATION_HEADER]: 'Unable to add new check move!',
+        [PROP_NOTIFICATION_BODY]:
+          'Please make sure that the user (student) will start moves from the white side when setting an initial board state!',
+        [PROP_FORMATTED_DATE_TIME]: moment().format('DD/MM/YYYY HH:mm'),
+        [PROP_DELAY_TIME]: 4000,
+        [PROP_WITH_AUTO_HIDE]: true,
+      });
+
+      return;
+    }
 
     this.setState(() => {
       let previousBoardPosition = '';
@@ -569,10 +593,6 @@ export default class LessonInfo extends PureComponent<Props, State> {
         isUnset &&
         !!Object.values((newCheckMove || {}) as CheckMove).length
       ) {
-        const {
-          [PROP_LESSON_DATA]: { checkMoves, initialBoardPosition },
-        } = this.props;
-
         if (!!checkMoves.length) {
           previousBoardPosition =
             checkMoves[checkMoves.length - 1][PROP_FEN_STRING];
