@@ -50,7 +50,7 @@ import {
   OperationType,
 } from '../types';
 import { PureComponent, ClipboardEvent, ChangeEvent, FormEvent } from 'react';
-import { ChessInstance } from 'chess.js';
+import { ChessInstance, Piece, PieceType } from 'chess.js';
 
 // Local types
 export interface Props {
@@ -216,6 +216,13 @@ export default class LessonInfo extends PureComponent<Props, State> {
               onClick={this.onResetChessBoardState}
             >
               Reset board
+            </Button>
+            <Button
+              variant="primary"
+              size={'sm'}
+              onClick={this.onClearChessBoardState}
+            >
+              Clear board
             </Button>
           </Col>
         </Form.Group>
@@ -476,10 +483,19 @@ export default class LessonInfo extends PureComponent<Props, State> {
       return;
     }
 
-    let move = (this.game as ChessInstance).move({
-      [PROP_FROM]: sourceSquare,
-      [PROP_TO]: targetSquare,
-    });
+    // Convert the UI piece model to chess.js
+    // piece model.
+    let chessPiece : Piece = {
+      color: piece[0] as 'b' | 'w',
+      type: piece[1].toLowerCase() as PieceType
+    };
+
+    const removedPiece = (this.game as ChessInstance).remove(sourceSquare);
+    let move = (this.game as ChessInstance).put(chessPiece, targetSquare);
+    if (!move && removedPiece) {
+      // put the removed chess piece back
+      (this.game as ChessInstance).put(removedPiece, sourceSquare);
+    }
 
     if (move) {
       const fenStr = (this.game as ChessInstance).fen();
@@ -594,9 +610,18 @@ export default class LessonInfo extends PureComponent<Props, State> {
   };
 
   private onResetChessBoardState = (): void => {
+    this.game?.reset();
+    this.updateStateFromCurrentBoard();
+  };
+
+  private onClearChessBoardState = (): void => {
+    this.game?.clear();
+    this.updateStateFromCurrentBoard();
+  };
+
+  private updateStateFromCurrentBoard = (): void => {
     const { onUpdateOperationData } = this.props;
 
-    this.game?.reset();
     const newFenStr = (this.game as ChessInstance).fen();
 
     this.setState({
